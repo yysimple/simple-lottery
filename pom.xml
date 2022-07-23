@@ -31,7 +31,15 @@
         <spring-boot.version>2.6.0</spring-boot.version>
         <mybatis-spring-boot.version>2.1.4</mybatis-spring-boot.version>
         <mysql.version>8.0.20</mysql.version>
-
+        <fastjson.version>1.2.78</fastjson.version>
+        <apache-commons.version>3.8</apache-commons.version>
+        <junit.version>4.12</junit.version>
+        <simple-rpc.version>1.0.0</simple-rpc.version>
+        <hutools.version>5.5.0</hutools.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <xxl-job.version>2.3.0</xxl-job.version>
+        <dbrouter.version>1.0.0</dbrouter.version>
+        <pagination.version>1.0.0</pagination.version>
     </properties>
 
     <dependencyManagement>
@@ -51,43 +59,32 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.78</version>
+                <version>${fastjson.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
-                <version>3.8</version>
+                <version>${apache-commons.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>junit</groupId>
                 <artifactId>junit</artifactId>
-                <version>4.12</version>
+                <version>${junit.version}</version>
                 <scope>test</scope>
             </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.dubbo/dubbo -->
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo</artifactId>
-                <version>2.7.10</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.apache.dubbo/dubbo-spring-boot-starter -->
-            <dependency>
-                <groupId>org.apache.dubbo</groupId>
-                <artifactId>dubbo-spring-boot-starter</artifactId>
-                <version>2.7.10</version>
-            </dependency>
 
-            <!-- https://mvnrepository.com/artifact/com.alibaba.boot/nacos-discovery-spring-boot-starter -->
+            <!--  自研rpc组件  -->
             <dependency>
-                <groupId>com.alibaba.boot</groupId>
-                <artifactId>nacos-discovery-spring-boot-starter</artifactId>
-                <version>0.2.7</version>
+                <groupId>com.simple.rpc.springboot</groupId>
+                <artifactId>simple-rpc-boot-starter</artifactId>
+                <version>${simple-rpc.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>cn.hutool</groupId>
                 <artifactId>hutool-all</artifactId>
-                <version>5.5.0</version>
+                <version>${hutools.version}</version>
             </dependency>
 
             <!-- MapStruct begin -->
@@ -95,13 +92,13 @@
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct</artifactId>
-                <version>1.4.2.Final</version>
+                <version>${mapstruct.version}</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/org.mapstruct/mapstruct-processor -->
             <dependency>
                 <groupId>org.mapstruct</groupId>
                 <artifactId>mapstruct-processor</artifactId>
-                <version>1.4.2.Final</version>
+                <version>${mapstruct.version}</version>
             </dependency>
             <!-- MapStruct end -->
 
@@ -109,14 +106,27 @@
             <dependency>
                 <groupId>com.xuxueli</groupId>
                 <artifactId>xxl-job-core</artifactId>
-                <version>2.3.0</version>
+                <version>${xxl-job.version}</version>
             </dependency>
 
-            <!-- 自研路由组件，下载构建：https://codechina.csdn.net/KnowledgePlanet/db-router-spring-boot-starter -->
+            <!-- 自研分库分表组件 -->
             <dependency>
-                <groupId>cn.bugstack.middleware</groupId>
-                <artifactId>db-router-spring-boot-starter</artifactId>
-                <version>1.0.1-SNAPSHOT</version>
+                <groupId>com.simple.dbrouter</groupId>
+                <artifactId>dbrouter-spring-boot-starter</artifactId>
+                <version>${dbrouter.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.simple.pagination</groupId>
+                <artifactId>pagination-spring-boot-starter</artifactId>
+                <version>${pagination.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok</artifactId>
+                <version>${lombok.version}</version>
+                <optional>true</optional>
             </dependency>
 
         </dependencies>
