@@ -2,20 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>simple-lottery</artifactId>
+        <groupId>com.simple.lottery</groupId>
+        <version>1.0.0</version>
+    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.simple.lottery</groupId>
-    <artifactId>simple-lottery</artifactId>
-    <packaging>pom</packaging>
-    <version>1.0.0</version>
-    <modules>
-        <module>simple-lottery-app</module>
-        <module>simple-lottery-common</module>
-        <module>simple-lottery-rpc</module>
-        <module>simple-lottery-domain</module>
-        <module>simple-lottery-infrastructure</module>
-        <module>simple-lottery-services</module>
-    </modules>
+    <groupId>com.simple.lottery.app</groupId>
+    <artifactId>simple-lottery-app</artifactId>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
