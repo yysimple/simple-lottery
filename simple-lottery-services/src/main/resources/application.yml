@@ -13,8 +13,8 @@ spring:
 simple:
   rpc:
     register:
-      address: redis://127.0.0.1:6379
-      #address: redis://192.168.31.100:6379
+      #address: redis://127.0.0.1:6379
+      address: redis://192.168.31.100:6379
       password: 123456
 
 # mybatis 相关配置

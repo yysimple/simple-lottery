@@ -36,7 +36,7 @@
         <apache-commons.version>3.8</apache-commons.version>
         <junit.version>4.12</junit.version>
         <simple-rpc.version>1.0.0</simple-rpc.version>
-        <hutools.version>5.5.0</hutools.version>
+        <hutools.version>5.7.4</hutools.version>
         <mapstruct.version>1.4.2.Final</mapstruct.version>
         <xxl-job.version>2.3.0</xxl-job.version>
         <dbrouter.version>1.0.0</dbrouter.version>
