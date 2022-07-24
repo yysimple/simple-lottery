@@ -1,7 +1,7 @@
 package com.simple.lottery.rpc;
 
+import com.simple.lottery.rpc.dto.ActivityDto;
 import com.simple.lottery.rpc.request.ActivityRequest;
-import com.simple.lottery.rpc.response.ActivityResponse;
 
 /**
  * 项目: simple-lottery
@@ -19,5 +19,5 @@ public interface IActivityBooth {
      * @param request
      * @return
      */
-    ActivityResponse queryActivityById(ActivityRequest request);
+    ActivityDto queryActivityById(ActivityRequest request);
 }

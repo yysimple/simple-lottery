@@ -1,5 +1,6 @@
 package com.simple.lottery.services;
 
+import com.simple.rpc.springboot.annotaton.SimpleRpcScan;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -13,6 +14,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @create: 2022-07-24 17:12
  **/
 @SpringBootApplication
+@SimpleRpcScan(basePackages = "com.simple.lottery.services.interfaces.rpc")
 @MapperScan(basePackages = "com.simple.lottery.infrastructure.mapper")
 public class SimpleLotteryApplication {
 
