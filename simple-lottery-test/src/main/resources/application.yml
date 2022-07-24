@@ -1,0 +1,12 @@
+server:
+  port: 9130
+
+spring:
+  application:
+    name: simple-lottery-test
+simple:
+  rpc:
+    register:
+      #address: redis://127.0.0.1:6379
+      address: redis://192.168.31.100:6379
+      password: 123456

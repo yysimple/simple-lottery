@@ -22,6 +22,7 @@
         <module>simple-lottery-domain</module>
         <module>simple-lottery-infrastructure</module>
         <module>simple-lottery-services</module>
+        <module>simple-lottery-test</module>
     </modules>
 
     <properties>
