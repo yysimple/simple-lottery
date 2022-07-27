@@ -65,7 +65,7 @@ create table if not exists strategy_detail
     awardId    bigint(11) null comment '奖品ID',
     awardCount int null comment '奖品数量',
     awardRate  decimal(5, 2) null comment '中奖概率',
-    awardSurplusCount int default 0 null comment '奖品剩余库存';
+    awardSurplusCount int default 0 null comment '奖品剩余库存',
     createTime datetime null comment '创建时间',
     updateTime datetime null comment '修改时间'
 ) comment '策略明细';
