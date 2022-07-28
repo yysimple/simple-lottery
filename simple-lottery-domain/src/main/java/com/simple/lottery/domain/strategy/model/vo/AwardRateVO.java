@@ -1,6 +1,8 @@
 package com.simple.lottery.domain.strategy.model.vo;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
@@ -13,6 +15,8 @@ import java.math.BigDecimal;
  * @create: 2022-07-28 21:18
  **/
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class AwardRateVO {
 
     /**
