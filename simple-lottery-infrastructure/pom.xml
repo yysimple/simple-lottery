@@ -26,6 +26,11 @@
         </dependency>
 
         <dependency>
+            <groupId>com.simple.dbrouter</groupId>
+            <artifactId>dbrouter-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.simple.lottery.common</groupId>
             <artifactId>simple-lottery-common</artifactId>
             <version>1.0.0</version>
