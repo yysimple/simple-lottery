@@ -20,20 +20,24 @@
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-        </dependency>
 
-        <dependency>
-            <groupId>com.simple.dbrouter</groupId>
-            <artifactId>dbrouter-spring-boot-starter</artifactId>
-        </dependency>
-
+        <!-- 公共模块 -->
         <dependency>
             <groupId>com.simple.lottery.common</groupId>
             <artifactId>simple-lottery-common</artifactId>
             <version>1.0.0</version>
+        </dependency>
+
+        <!-- 领域模块 -->
+        <dependency>
+            <groupId>com.simple.lottery.domain</groupId>
+            <artifactId>simple-lottery-domain</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
     </dependencies>
 
