@@ -1,4 +1,4 @@
-package com.simple.lottery.services;
+package com.simple.lottery.domain;
 
 import com.alibaba.fastjson.JSON;
 import com.simple.lottery.infrastructure.entity.Activity;

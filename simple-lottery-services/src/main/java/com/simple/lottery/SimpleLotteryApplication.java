@@ -1,4 +1,4 @@
-package com.simple.lottery.services;
+package com.simple.lottery;
 
 import com.simple.rpc.springboot.annotaton.SimpleRpcScan;
 import org.mybatis.spring.annotation.MapperScan;
