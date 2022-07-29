@@ -70,7 +70,7 @@ public class DrawAlgorithmTest {
 
     @Test
     public void testDrawExec() {
-        DrawResponse drawResult = iDrawExec.doDrawExec(new DrawRequest("wcx001", 100001L));
+        DrawResponse drawResult = iDrawExec.doDrawExec(new DrawRequest("wcx001", 1001L));
         logger.info("测试结果：{}", JSON.toJSONString(drawResult));
     }
 }
