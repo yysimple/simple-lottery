@@ -1,5 +1,6 @@
 package com.simple.lottery.domain.award.model.request;
 
+import com.simple.lottery.domain.award.model.vo.ShippingAddress;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
