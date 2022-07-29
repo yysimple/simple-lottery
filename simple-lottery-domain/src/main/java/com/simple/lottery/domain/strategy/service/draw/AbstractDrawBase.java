@@ -22,7 +22,7 @@ import java.util.List;
  **/
 public abstract class AbstractDrawBase extends DrawStrategySupport implements IDrawExec {
 
-    private Logger logger = LoggerFactory.getLogger(AbstractDrawBase.class);
+    private final Logger logger = LoggerFactory.getLogger(AbstractDrawBase.class);
 
     @Override
     public DrawResponse doDrawExec(DrawRequest req) {

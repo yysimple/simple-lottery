@@ -20,8 +20,9 @@ import java.util.concurrent.ConcurrentHashMap;
  * @create: 2022-07-28 21:57
  **/
 public class DrawConfig {
+
     @Resource
-    private List<IDrawAlgorithm> algorithmList = new ArrayList<>();
+    private final List<IDrawAlgorithm> algorithmList = new ArrayList<>();
 
     /**
      * 抽奖策略组
