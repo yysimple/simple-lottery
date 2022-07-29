@@ -1,3 +1,4 @@
+use simple_lottery;
 # 策略表
 INSERT INTO simple_lottery.strategy (id, strategy_id, strategy_desc, strategy_mode, grant_type, grant_date, ext_info, create_time, update_time) VALUES (1, 1001, '测试策略1', 1, 1, '2022-07-29 17:29:35', '11111', '2022-07-29 17:29:42', '2022-07-29 17:29:44');
 INSERT INTO simple_lottery.strategy (id, strategy_id, strategy_desc, strategy_mode, grant_type, grant_date, ext_info, create_time, update_time) VALUES (2, 1002, '测试策略2', 2, 1, '2022-07-29 17:30:17', '22222', '2022-07-29 17:30:21', '2022-07-29 17:30:24');
