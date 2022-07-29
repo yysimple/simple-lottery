@@ -56,6 +56,9 @@ create table if not exists strategy
         unique (strategy_id)
 ) comment '策略配置';
 
+ALTER TABLE simple_lottery.`strategy_detail` ADD  KEY `idx_strategyId_awardId` (`strategy_id`, `award_id`) COMMENT '策略id+奖品id的索引';
+
+
 -- 策略明细
 create table if not exists strategy_detail
 (

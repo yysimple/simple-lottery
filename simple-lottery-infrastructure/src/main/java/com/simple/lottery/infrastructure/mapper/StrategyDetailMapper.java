@@ -2,6 +2,7 @@ package com.simple.lottery.infrastructure.mapper;
 
 import com.simple.lottery.infrastructure.entity.StrategyDetail;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -46,4 +47,14 @@ public interface StrategyDetailMapper {
      * @param list 策略配置组
      */
     void insertList(List<StrategyDetail> list);
+
+    /**
+     * 获取并锁定指定策略的指定奖品的策略详情
+     *
+     * @param strategyId
+     * @param awardId
+     * @return
+     */
+    StrategyDetail getAndLockByStrategyIdAndAwardId(@Param("strategyId") Long strategyId, @Param("awardId") String awardId);
+
 }

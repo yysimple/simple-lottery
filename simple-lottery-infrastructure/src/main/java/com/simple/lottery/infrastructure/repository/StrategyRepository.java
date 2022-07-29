@@ -12,9 +12,11 @@ import com.simple.lottery.infrastructure.mapper.AwardMapper;
 import com.simple.lottery.infrastructure.mapper.StrategyDetailMapper;
 import com.simple.lottery.infrastructure.mapper.StrategyMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -52,7 +54,7 @@ public class StrategyRepository implements IStrategyRepository {
 
         List<StrategyDetailBriefVO> strategyDetailBriefVOList = new ArrayList<>();
         for (StrategyDetail strategyDetail : strategyDetailList) {
-            StrategyDetailBriefVO  strategyDetailBriefVO = new StrategyDetailBriefVO();
+            StrategyDetailBriefVO strategyDetailBriefVO = new StrategyDetailBriefVO();
             strategyDetailBriefVO.setStrategyId(strategyDetail.getStrategyId());
             strategyDetailBriefVO.setAwardId(strategyDetail.getAwardId());
             strategyDetailBriefVO.setAwardName(strategyDetail.getAwardName());
@@ -85,11 +87,17 @@ public class StrategyRepository implements IStrategyRepository {
     }
 
     @Override
+    @Transactional
     public boolean deductStock(Long strategyId, String awardId) {
-        StrategyDetail req = new StrategyDetail();
-        req.setStrategyId(strategyId);
-        req.setAwardId(awardId);
-        int count = strategyDetailMapper.deductStock(req);
-        return count == 1;
+        //先通过策略id+奖品id加锁记录
+        StrategyDetail strategyDetail = strategyDetailMapper.getAndLockByStrategyIdAndAwardId(strategyId, awardId);
+        if (null != strategyDetail && strategyDetail.getAwardSurplusCount() > 0) {
+            strategyDetail.setAwardSurplusCount(strategyDetail.getAwardSurplusCount() - 1);
+            strategyDetail.setUpdateTime(new Date());
+            int count = strategyDetailMapper.deductStock(strategyDetail);
+            return count == 1;
+        }
+        return false;
+
     }
 }
