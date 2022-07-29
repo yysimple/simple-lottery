@@ -25,13 +25,13 @@ import java.util.Date;
 @SpringBootTest
 public class ActivityTest {
 
-    private Logger logger = LoggerFactory.getLogger(ActivityTest.class);
+    private final Logger logger = LoggerFactory.getLogger(ActivityTest.class);
 
     @Resource
     ActivityMapper activityMapper;
 
     @Test
-    public void test_insert() {
+    public void testInsert() {
         Activity activity = new Activity();
         activity.setActivityId(100002L);
         activity.setActivityName("测试活动");
@@ -41,12 +41,12 @@ public class ActivityTest {
         activity.setStockCount(100);
         activity.setTakeCount(10);
         activity.setState(0);
-        activity.setCreator("xiaofuge");
+        activity.setCreator("wcx");
         activityMapper.insert(activity);
     }
 
     @Test
-    public void test_select() {
+    public void testSelect() {
         Activity activity = activityMapper.queryActivityById(100002L);
         logger.info("测试结果：{}", JSON.toJSONString(activity));
     }
