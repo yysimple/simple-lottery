@@ -10,7 +10,8 @@ import java.util.List;
 /**
  * 项目: simple-lottery
  * <p>
- * 功能描述:
+ * 功能描述: 普通的固定的策略，每次中奖概率都是固定的；当没有库存的情况下，则相当于是将该
+ * 奖品进行过滤，然后返回null，或者一些其他的补偿
  *
  * @author: WuChengXing
  * @create: 2022-07-28 21:53

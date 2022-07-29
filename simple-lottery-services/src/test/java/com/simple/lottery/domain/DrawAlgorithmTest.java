@@ -35,7 +35,7 @@ public class DrawAlgorithmTest {
     private final Logger logger = LoggerFactory.getLogger(DrawAlgorithmTest.class);
 
     @Resource(name = "entiretyRateRandomDrawAlgorithm")
-//    @Resource(name = "singleRateRandomDrawAlgorithm")
+    //@Resource(name = "singleRateRandomDrawAlgorithm")
     private IDrawAlgorithm randomDrawAlgorithm;
 
     @Resource(name = "drawExec")
@@ -70,7 +70,7 @@ public class DrawAlgorithmTest {
 
     @Test
     public void testDrawExec() {
-        DrawResponse drawResult = iDrawExec.doDrawExec(new DrawRequest("wcx001", 100002L));
+        DrawResponse drawResult = iDrawExec.doDrawExec(new DrawRequest("wcx001", 100001L));
         logger.info("测试结果：{}", JSON.toJSONString(drawResult));
     }
 }

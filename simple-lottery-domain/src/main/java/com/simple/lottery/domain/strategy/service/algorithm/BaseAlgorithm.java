@@ -88,7 +88,7 @@ public abstract class BaseAlgorithm implements IDrawAlgorithm {
     }
 
     /**
-     * 生成百位随机抽奖码
+     * 生成百位随机抽奖码；因为是按照概率平铺，所以最终值是100；而后续也是通过100来进行hash
      *
      * @return 随机值
      */
