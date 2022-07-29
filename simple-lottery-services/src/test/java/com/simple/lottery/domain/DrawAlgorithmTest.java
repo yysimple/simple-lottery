@@ -52,7 +52,7 @@ public class DrawAlgorithmTest {
         strategyList.add(new AwardRateVO("五等奖：充电宝", new BigDecimal("0.35")));
 
         // 初始数据
-        randomDrawAlgorithm.initRateTuple(100002L, StrategyMode.SINGLE.getCode(), strategyList);
+        randomDrawAlgorithm.initRateTuple(100001L, StrategyMode.SINGLE.getCode(), strategyList);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class DrawAlgorithmTest {
         excludeAwardIds.add("四等奖：AirPods");
 
         for (int i = 0; i < 20; i++) {
-            System.out.println("中奖结果：" + randomDrawAlgorithm.randomDraw(100002L, excludeAwardIds));
+            System.out.println("中奖结果：" + randomDrawAlgorithm.randomDraw(100001L, excludeAwardIds));
         }
 
     }

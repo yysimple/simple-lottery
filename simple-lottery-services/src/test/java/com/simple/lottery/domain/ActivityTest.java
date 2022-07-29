@@ -33,7 +33,7 @@ public class ActivityTest {
     @Test
     public void testInsert() {
         Activity activity = new Activity();
-        activity.setActivityId(100002L);
+        activity.setActivityId(100001L);
         activity.setActivityName("测试活动");
         activity.setActivityDesc("仅用于插入数据测试");
         activity.setBeginDateTime(new Date());
@@ -47,7 +47,7 @@ public class ActivityTest {
 
     @Test
     public void testSelect() {
-        Activity activity = activityMapper.queryActivityById(100002L);
+        Activity activity = activityMapper.queryActivityById(100001L);
         logger.info("测试结果：{}", JSON.toJSONString(activity));
     }
 }
