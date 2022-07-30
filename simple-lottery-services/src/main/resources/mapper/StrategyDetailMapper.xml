@@ -55,13 +55,13 @@
     <select id="getAndLockByStrategyIdAndAwardId"
             resultType="com.simple.lottery.infrastructure.entity.StrategyDetail">
         SELECT id,
-               strategyId,
-               awardId,
-               awardCount,
-               awardSurplusCount,
-               awardRate,
-               createTime,
-               updateTime
+               strategy_id as strategyId,
+               award_id as awardId,
+               award_count as awardCount,
+               award_surplus_count as awardSurplusCount,
+               award_rate as awardRate,
+               create_time as createTime,
+               update_time as updateTime
         FROM strategy_detail
         WHERE strategy_id = #{strategyId}
           AND award_id = #{awardId}

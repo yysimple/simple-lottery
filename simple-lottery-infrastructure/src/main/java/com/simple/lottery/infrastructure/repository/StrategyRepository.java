@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 项目: simple-lottery
@@ -91,7 +92,7 @@ public class StrategyRepository implements IStrategyRepository {
     public boolean deductStock(Long strategyId, String awardId) {
         //先通过策略id+奖品id加锁记录
         StrategyDetail strategyDetail = strategyDetailMapper.getAndLockByStrategyIdAndAwardId(strategyId, awardId);
-        if (null != strategyDetail && strategyDetail.getAwardSurplusCount() > 0) {
+        if (null != strategyDetail && !Objects.isNull(strategyDetail.getAwardSurplusCount()) && strategyDetail.getAwardSurplusCount() > 0) {
             strategyDetail.setAwardSurplusCount(strategyDetail.getAwardSurplusCount() - 1);
             strategyDetail.setUpdateTime(new Date());
             int count = strategyDetailMapper.deductStock(strategyDetail);
