@@ -9,47 +9,48 @@ import org.springframework.stereotype.Service;
 /**
  * 项目: simple-lottery
  * <p>
- * 功能描述: 活动关闭状态
+ * 功能描述:
  *
  * @author: WuChengXing
- * @create: 2022-07-31 23:54
+ * @create: 2022-08-01 00:00
  **/
 @Service
-public class CloseState extends AbstractState {
+public class RefuseState extends AbstractState {
 
     @Override
     public Result arraignment(Long activityId, Enum<ActivityState> currentState) {
-        return Result.buildResult(ResponseCode.UN_ERROR, "活动关闭不可提审");
+        return Result.buildResult(ResponseCode.UN_ERROR, "已审核状态不可重复提审");
     }
 
     @Override
     public Result checkPass(Long activityId, Enum<ActivityState> currentState) {
-        return Result.buildResult(ResponseCode.UN_ERROR, "活动关闭不可审核通过");
+        return Result.buildResult(ResponseCode.UN_ERROR, "已审核状态不可重复审核");
     }
 
     @Override
     public Result checkRefuse(Long activityId, Enum<ActivityState> currentState) {
-        return Result.buildResult(ResponseCode.UN_ERROR, "活动关闭不可审核拒绝");
+        return Result.buildResult(ResponseCode.UN_ERROR, "活动审核拒绝不可重复审核");
     }
 
     @Override
     public Result checkRevoke(Long activityId, Enum<ActivityState> currentState) {
-        return Result.buildResult(ResponseCode.UN_ERROR, "活动关闭不可撤销审核");
+        boolean isSuccess = activityRepository.alterStatus(activityId, currentState, ActivityState.EDIT);
+        return isSuccess ? Result.buildResult(ResponseCode.SUCCESS, "撤销审核完成") : Result.buildErrorResult("活动状态变更失败");
     }
 
     @Override
     public Result close(Long activityId, Enum<ActivityState> currentState) {
-        return Result.buildResult(ResponseCode.UN_ERROR, "活动关闭不可重复关闭");
+        boolean isSuccess = activityRepository.alterStatus(activityId, currentState, ActivityState.CLOSE);
+        return isSuccess ? Result.buildResult(ResponseCode.SUCCESS, "活动审核关闭完成") : Result.buildErrorResult("活动状态变更失败");
     }
 
     @Override
     public Result open(Long activityId, Enum<ActivityState> currentState) {
-        boolean isSuccess = activityRepository.alterStatus(activityId, currentState, ActivityState.OPEN);
-        return isSuccess ? Result.buildResult(ResponseCode.SUCCESS, "活动开启完成") : Result.buildErrorResult("活动状态变更失败");
+        return Result.buildResult(ResponseCode.UN_ERROR, "非关闭活动不可开启");
     }
 
     @Override
     public Result doing(Long activityId, Enum<ActivityState> currentState) {
-        return Result.buildResult(ResponseCode.UN_ERROR, "活动关闭不可变更活动中");
+        return Result.buildResult(ResponseCode.UN_ERROR, "审核拒绝不可执行活动为进行中");
     }
 }
