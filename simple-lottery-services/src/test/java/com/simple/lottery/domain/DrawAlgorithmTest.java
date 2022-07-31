@@ -1,12 +1,14 @@
 package com.simple.lottery.domain;
 
 import com.alibaba.fastjson.JSON;
+import com.simple.lottery.common.enums.Ids;
 import com.simple.lottery.common.enums.StrategyMode;
 import com.simple.lottery.domain.strategy.model.request.DrawRequest;
 import com.simple.lottery.domain.strategy.model.result.DrawResult;
 import com.simple.lottery.domain.strategy.model.vo.AwardRateVO;
 import com.simple.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
 import com.simple.lottery.domain.strategy.service.draw.IDrawExec;
+import com.simple.lottery.domain.support.ids.IdGenerator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,6 +21,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 项目: simple-lottery
@@ -71,5 +74,15 @@ public class DrawAlgorithmTest {
     public void testDrawExec() {
         DrawResult drawResult = iDrawExec.doDrawExec(new DrawRequest("wcx001", 10001L));
         logger.info("测试结果：{}", JSON.toJSONString(drawResult));
+    }
+
+    @Resource
+    private Map<Ids, IdGenerator> idGeneratorMap;
+
+    @Test
+    public void test_ids() {
+        logger.info("雪花算法策略，生成ID：{}", idGeneratorMap.get(Ids.SnowFlake).nextId());
+        logger.info("日期算法策略，生成ID：{}", idGeneratorMap.get(Ids.ShortCode).nextId());
+        logger.info("随机算法策略，生成ID：{}", idGeneratorMap.get(Ids.RandomNumeric).nextId());
     }
 }
