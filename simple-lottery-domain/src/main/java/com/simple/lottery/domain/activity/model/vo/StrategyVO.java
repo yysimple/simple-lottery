@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 项目: simple-lottery
@@ -48,4 +49,9 @@ public class StrategyVO {
      * 扩展信息
      */
     private String extInfo;
+
+    /**
+     * 策略详情配置
+     */
+    private List<StrategyDetailVO> strategyDetailList;
 }

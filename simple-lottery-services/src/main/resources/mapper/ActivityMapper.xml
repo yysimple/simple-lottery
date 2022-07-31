@@ -21,14 +21,29 @@
         INSERT INTO activity
         (activity_id, activity_name, activity_desc, begin_date_time, end_date_time,
          stock_count, take_count, state, creator, create_time, update_time)
-        VALUES
-        (#{activityId}, #{activityName}, #{activityDesc}, #{beginDateTime}, #{endDateTime},
-         #{stockCount}, #{takeCount}, #{state}, #{creator}, now(), now())
+        VALUES (#{activityId}, #{activityName}, #{activityDesc}, #{beginDateTime}, #{endDateTime},
+                #{stockCount}, #{takeCount}, #{state}, #{creator}, now(), now())
     </insert>
 
+    <update id="alterState" parameterType="com.simple.lottery.domain.activity.model.vo.AlterStateVO">
+        UPDATE activity
+        SET state = #{afterState}
+        WHERE activity_id = #{activityId}
+          AND state = #{beforeState}
+    </update>
+
     <select id="queryActivityById" parameterType="java.lang.Long" resultMap="activityMap">
-        SELECT activity_id, activity_name, activity_desc, begin_date_time, end_date_time,
-               stock_count, take_count, state, creator, create_time, update_time
+        SELECT activity_id,
+               activity_name,
+               activity_desc,
+               begin_date_time,
+               end_date_time,
+               stock_count,
+               take_count,
+               state,
+               creator,
+               create_time,
+               update_time
         FROM activity
         WHERE activity_id = #{activityId}
     </select>
