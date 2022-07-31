@@ -1,6 +1,8 @@
 package com.simple.lottery.domain;
 
 import com.alibaba.fastjson.JSON;
+import com.simple.lottery.common.enums.ActivityState;
+import com.simple.lottery.domain.activity.service.stateflow.IStateHandler;
 import com.simple.lottery.infrastructure.entity.Activity;
 import com.simple.lottery.infrastructure.mapper.ActivityMapper;
 import org.junit.Test;
@@ -30,6 +32,9 @@ public class ActivityTest {
     @Resource
     ActivityMapper activityMapper;
 
+    @Resource
+    private IStateHandler stateHandler;
+
     @Test
     public void testInsert() {
         Activity activity = new Activity();
@@ -49,5 +54,13 @@ public class ActivityTest {
     public void testSelect() {
         Activity activity = activityMapper.queryActivityById(100001L);
         logger.info("测试结果：{}", JSON.toJSONString(activity));
+    }
+
+    @Test
+    public void test_alterState() {
+        logger.info("提交审核，测试：{}", JSON.toJSONString(stateHandler.arraignment(100001L, ActivityState.EDIT)));
+        logger.info("审核通过，测试：{}", JSON.toJSONString(stateHandler.checkPass(100001L, ActivityState.ARRAIGNMENT)));
+        logger.info("运行活动，测试：{}", JSON.toJSONString(stateHandler.doing(100001L, ActivityState.PASS)));
+        logger.info("二次提审，测试：{}", JSON.toJSONString(stateHandler.checkPass(100001L, ActivityState.EDIT)));
     }
 }
