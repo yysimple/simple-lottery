@@ -14,6 +14,7 @@ import com.simple.lottery.infrastructure.mapper.*;
 import com.simple.lottery.infrastructure.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ import java.util.List;
  * @author: WuChengXing
  * @create: 2022-07-28 20:59
  **/
+@Repository
 public class ActivityRepository implements IActivityRepository {
 
     private final Logger logger = LoggerFactory.getLogger(ActivityRepository.class);

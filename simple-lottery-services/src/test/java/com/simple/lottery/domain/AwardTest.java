@@ -45,17 +45,17 @@ public class AwardTest {
 
     @Test
     public void test_drawExec() {
-        drawExec.doDrawExec(new DrawRequest("wcx", 1001L));
-        drawExec.doDrawExec(new DrawRequest("zyy", 1001L));
-        drawExec.doDrawExec(new DrawRequest("ysq", 1001L));
-        drawExec.doDrawExec(new DrawRequest("cc", 1001L));
+        drawExec.doDrawExec(new DrawRequest("wcx", 10001L));
+        drawExec.doDrawExec(new DrawRequest("zyy", 10001L));
+        drawExec.doDrawExec(new DrawRequest("ysq", 10001L));
+        drawExec.doDrawExec(new DrawRequest("cc", 10001L));
     }
 
 
     @Test
     public void test_award() {
         // 执行抽奖
-        DrawResult drawResult = drawExec.doDrawExec(new DrawRequest("wcx", 1001L));
+        DrawResult drawResult = drawExec.doDrawExec(new DrawRequest("wcx", 10001L));
 
         // 判断抽奖结果
         Integer drawState = drawResult.getDrawState();
