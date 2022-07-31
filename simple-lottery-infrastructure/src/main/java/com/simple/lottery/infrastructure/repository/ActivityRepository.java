@@ -7,7 +7,7 @@ import com.simple.lottery.common.enums.ResponseCode;
 import com.simple.lottery.domain.activity.model.aggregates.ActivityInfoLimitPageRich;
 import com.simple.lottery.domain.activity.model.request.ActivityInfoLimitPageRequest;
 import com.simple.lottery.domain.activity.model.request.PartakeRequest;
-import com.simple.lottery.domain.activity.model.response.StockResponse;
+import com.simple.lottery.domain.activity.model.result.StockResult;
 import com.simple.lottery.domain.activity.model.vo.*;
 import com.simple.lottery.domain.activity.repository.IActivityRepository;
 import com.simple.lottery.infrastructure.entity.*;
@@ -146,7 +146,7 @@ public class ActivityRepository implements IActivityRepository {
     }
 
     @Override
-    public SimpleResponse<StockResponse> subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount) {
+    public SimpleResponse<StockResult> subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount) {
 
         //  1. 获取抽奖活动库存 Key
         String stockKey = RedisKeyConstant.KEY_LOTTERY_ACTIVITY_STOCK_COUNT(activityId);
@@ -170,7 +170,7 @@ public class ActivityRepository implements IActivityRepository {
             return SimpleResponse.error(ResponseCode.ERR_TOKEN.getCode(), ResponseCode.ERR_TOKEN.getInfo());
         }
 
-        return new SimpleResponse<>(new StockResponse(stockTokenKey, stockCount - stockUsedCount));
+        return new SimpleResponse<>(new StockResult(stockTokenKey, stockCount - stockUsedCount));
     }
 
     @Override

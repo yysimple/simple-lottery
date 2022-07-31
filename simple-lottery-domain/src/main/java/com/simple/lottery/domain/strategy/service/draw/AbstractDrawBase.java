@@ -3,7 +3,7 @@ package com.simple.lottery.domain.strategy.service.draw;
 import com.simple.lottery.common.enums.DrawState;
 import com.simple.lottery.domain.strategy.model.aggregates.StrategyRich;
 import com.simple.lottery.domain.strategy.model.request.DrawRequest;
-import com.simple.lottery.domain.strategy.model.response.DrawResponse;
+import com.simple.lottery.domain.strategy.model.result.DrawResult;
 import com.simple.lottery.domain.strategy.model.vo.*;
 import com.simple.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
 import org.slf4j.Logger;
@@ -25,7 +25,7 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
     private final Logger logger = LoggerFactory.getLogger(AbstractDrawBase.class);
 
     @Override
-    public DrawResponse doDrawExec(DrawRequest req) {
+    public DrawResult doDrawExec(DrawRequest req) {
         // 1. 获取抽奖策略
         StrategyRich strategyRich = super.queryStrategyRich(req.getStrategyId());
         StrategyBriefVO strategy = strategyRich.getStrategy();
@@ -96,10 +96,10 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
      * @param awardId    奖品ID，null 情况：并发抽奖情况下，库存临界值1 -> 0，会有用户中奖结果为 null
      * @return 中奖结果
      */
-    private DrawResponse buildDrawResult(String uId, Long strategyId, String awardId, StrategyBriefVO strategy) {
+    private DrawResult buildDrawResult(String uId, Long strategyId, String awardId, StrategyBriefVO strategy) {
         if (null == awardId) {
             logger.info("执行策略抽奖完成【未中奖】，用户：{} 策略ID：{}", uId, strategyId);
-            return new DrawResponse(uId, strategyId, DrawState.FAIL.getCode());
+            return new DrawResult(uId, strategyId, DrawState.FAIL.getCode());
         }
 
         AwardBriefVO award = super.queryAwardInfoByAwardId(awardId);
@@ -109,6 +109,6 @@ public abstract class AbstractDrawBase extends DrawStrategySupport implements ID
         drawAwardInfo.setGrantDate(strategy.getGrantDate());
         logger.info("执行策略抽奖完成【已中奖】，用户：{} 策略ID：{} 奖品ID：{} 奖品名称：{}", uId, strategyId, awardId, award.getAwardName());
 
-        return new DrawResponse(uId, strategyId, DrawState.SUCCESS.getCode(), drawAwardInfo);
+        return new DrawResult(uId, strategyId, DrawState.SUCCESS.getCode(), drawAwardInfo);
     }
 }

@@ -1,6 +1,5 @@
-package com.simple.lottery.domain.strategy.model.response;
+package com.simple.lottery.domain.strategy.model.result;
 
-import com.simple.lottery.common.constant.Constants;
 import com.simple.lottery.common.enums.DrawState;
 import com.simple.lottery.domain.strategy.model.vo.DrawAwardVO;
 import lombok.Data;
@@ -14,7 +13,7 @@ import lombok.Data;
  * @create: 2022-07-28 21:24
  **/
 @Data
-public class DrawResponse {
+public class DrawResult {
     /**
      * 用户ID
      */
@@ -35,16 +34,16 @@ public class DrawResponse {
      */
     private DrawAwardVO drawAwardInfo;
 
-    public DrawResponse() {
+    public DrawResult() {
     }
 
-    public DrawResponse(String uId, Long strategyId, Integer drawState) {
+    public DrawResult(String uId, Long strategyId, Integer drawState) {
         this.uId = uId;
         this.strategyId = strategyId;
         this.drawState = drawState;
     }
 
-    public DrawResponse(String uId, Long strategyId, Integer drawState, DrawAwardVO drawAwardInfo) {
+    public DrawResult(String uId, Long strategyId, Integer drawState, DrawAwardVO drawAwardInfo) {
         this.uId = uId;
         this.strategyId = strategyId;
         this.drawState = drawState;

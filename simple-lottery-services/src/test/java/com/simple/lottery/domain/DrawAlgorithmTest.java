@@ -3,11 +3,10 @@ package com.simple.lottery.domain;
 import com.alibaba.fastjson.JSON;
 import com.simple.lottery.common.enums.StrategyMode;
 import com.simple.lottery.domain.strategy.model.request.DrawRequest;
-import com.simple.lottery.domain.strategy.model.response.DrawResponse;
+import com.simple.lottery.domain.strategy.model.result.DrawResult;
 import com.simple.lottery.domain.strategy.model.vo.AwardRateVO;
 import com.simple.lottery.domain.strategy.service.algorithm.IDrawAlgorithm;
 import com.simple.lottery.domain.strategy.service.draw.IDrawExec;
-import com.simple.lottery.SimpleLotteryApplication;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -70,7 +69,7 @@ public class DrawAlgorithmTest {
 
     @Test
     public void testDrawExec() {
-        DrawResponse drawResult = iDrawExec.doDrawExec(new DrawRequest("wcx001", 1001L));
+        DrawResult drawResult = iDrawExec.doDrawExec(new DrawRequest("wcx001", 1001L));
         logger.info("测试结果：{}", JSON.toJSONString(drawResult));
     }
 }

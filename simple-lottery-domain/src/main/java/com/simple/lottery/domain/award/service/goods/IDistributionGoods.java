@@ -1,7 +1,7 @@
 package com.simple.lottery.domain.award.service.goods;
 
 import com.simple.lottery.domain.award.model.request.GoodsRequest;
-import com.simple.lottery.domain.award.model.response.DistributionResponse;
+import com.simple.lottery.domain.award.model.result.DistributionResult;
 
 /**
  * 项目: simple-lottery
@@ -19,5 +19,5 @@ public interface IDistributionGoods {
      * @param request 物品信息
      * @return 配送结果
      */
-    DistributionResponse doDistribution(GoodsRequest request);
+    DistributionResult doDistribution(GoodsRequest request);
 }

@@ -1,8 +1,7 @@
-package com.simple.lottery.domain.activity.model.response;
+package com.simple.lottery.domain.activity.model.result;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.simple.lottery.common.entity.Result;
+import lombok.*;
 
 /**
  * 项目: simple-lottery
@@ -12,10 +11,10 @@ import lombok.NoArgsConstructor;
  * @author: WuChengXing
  * @create: 2022-07-31 13:50
  **/
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class StockResponse {
+@Getter
+@Setter
+@ToString
+public class StockResult extends Result {
 
     /**
      * 库存 Key
@@ -25,4 +24,8 @@ public class StockResponse {
      * activity 库存剩余
      */
     private Integer stockSurplusCount;
+
+    public StockResult(String code, String info) {
+        super(code, info);
+    }
 }

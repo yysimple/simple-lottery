@@ -4,8 +4,8 @@ import com.simple.lottery.common.entity.SimpleResponse;
 import com.simple.lottery.common.enums.Ids;
 import com.simple.lottery.common.enums.ResponseCode;
 import com.simple.lottery.domain.activity.model.request.PartakeRequest;
-import com.simple.lottery.domain.activity.model.response.PartakeResponse;
-import com.simple.lottery.domain.activity.model.response.StockResponse;
+import com.simple.lottery.domain.activity.model.result.PartakeResult;
+import com.simple.lottery.domain.activity.model.result.StockResult;
 import com.simple.lottery.domain.activity.model.vo.ActivityBillVO;
 import com.simple.lottery.domain.activity.model.vo.UserTakeActivityVO;
 import com.simple.lottery.domain.support.ids.IdGenerator;
@@ -27,7 +27,7 @@ public class BaseActivityPartake extends ActivityPartakeSupport implements IActi
     private Map<Ids, IdGenerator> idGeneratorMap;
 
     @Override
-    public SimpleResponse<PartakeResponse> doPartake(PartakeRequest request) {
+    public SimpleResponse<PartakeResult> doPartake(PartakeRequest request) {
 
         // 1. 查询是否存在未执行抽奖领取活动单【user_take_activity 存在 state = 0，领取了但抽奖过程失败的，可以直接返回领取结果继续抽奖】
         UserTakeActivityVO userTakeActivityVO = this.queryNoConsumedTakeActivityOrder(request.getActivityId(), request.getUId());
@@ -93,11 +93,11 @@ public class BaseActivityPartake extends ActivityPartakeSupport implements IActi
      * @param code       状态码
      * @return 封装结果
      */
-    private SimpleResponse<PartakeResponse> buildPartakeResult(Long strategyId, Long takeId, ResponseCode code) {
-        PartakeResponse partakeResponse = new PartakeResponse();
-        partakeResponse.setStrategyId(strategyId);
-        partakeResponse.setTakeId(takeId);
-        return SimpleResponse.success(partakeResponse, code.getCode(), code.getInfo());
+    private SimpleResponse<PartakeResult> buildPartakeResult(Long strategyId, Long takeId, ResponseCode code) {
+        PartakeResult partakeResult = new PartakeResult(code.getCode(), code.getInfo());
+        partakeResult.setStrategyId(strategyId);
+        partakeResult.setTakeId(takeId);
+        return SimpleResponse.success(partakeResult, code.getCode(), code.getInfo());
     }
 
     /**
@@ -134,7 +134,7 @@ public class BaseActivityPartake extends ActivityPartakeSupport implements IActi
      * @param stockCount 总库存
      * @return 扣减结果
      */
-    protected abstract SimpleResponse<StockResponse> subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount);
+    protected abstract SimpleResponse<StockResult> subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount);
 
     /**
      * 恢复活动库存，通过Redis 【如果非常异常，则需要进行缓存库存恢复，只保证不超卖的特性，所以不保证一定能恢复占用库存，另外最终可以由任务进行补偿库存】

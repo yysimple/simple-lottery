@@ -2,7 +2,7 @@ package com.simple.lottery.domain.activity.service.partake;
 
 import com.simple.lottery.common.entity.SimpleResponse;
 import com.simple.lottery.domain.activity.model.request.PartakeRequest;
-import com.simple.lottery.domain.activity.model.response.PartakeResponse;
+import com.simple.lottery.domain.activity.model.result.PartakeResult;
 import com.simple.lottery.domain.activity.model.vo.ActivityPartakeRecordVO;
 import com.simple.lottery.domain.activity.model.vo.DrawOrderVO;
 import com.simple.lottery.domain.activity.model.vo.InvoiceVO;
@@ -24,7 +24,7 @@ public interface IActivityPartake {
      * @param request 入参
      * @return 领取结果
      */
-    SimpleResponse<PartakeResponse> doPartake(PartakeRequest request);
+    SimpleResponse<PartakeResult> doPartake(PartakeRequest request);
 
     /**
      * 保存奖品单
@@ -32,7 +32,7 @@ public interface IActivityPartake {
      * @param drawOrder 奖品单
      * @return 保存结果
      */
-    SimpleResponse<PartakeResponse> recordDrawOrder(DrawOrderVO drawOrder);
+    SimpleResponse<PartakeResult> recordDrawOrder(DrawOrderVO drawOrder);
 
     /**
      * 更新发货单 MQ 状态

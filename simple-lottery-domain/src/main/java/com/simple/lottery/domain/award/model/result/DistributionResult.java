@@ -1,4 +1,4 @@
-package com.simple.lottery.domain.award.model.response;
+package com.simple.lottery.domain.award.model.result;
 
 import lombok.Data;
 
@@ -11,7 +11,7 @@ import lombok.Data;
  * @create: 2022-07-30 00:17
  **/
 @Data
-public class DistributionResponse {
+public class DistributionResult {
 
     /**
      * 用户ID
@@ -32,7 +32,7 @@ public class DistributionResponse {
      */
     private String statementId;
 
-    public DistributionResponse() {
+    public DistributionResult() {
     }
 
     /**
@@ -42,13 +42,13 @@ public class DistributionResponse {
      * @param code 编码
      * @param info 描述
      */
-    public DistributionResponse(String uId, Integer code, String info) {
+    public DistributionResult(String uId, Integer code, String info) {
         this.uId = uId;
         this.code = code;
         this.info = info;
     }
 
-    public DistributionResponse(String uId, Integer code, String info, String statementId) {
+    public DistributionResult(String uId, Integer code, String info, String statementId) {
         this.uId = uId;
         this.code = code;
         this.info = info;

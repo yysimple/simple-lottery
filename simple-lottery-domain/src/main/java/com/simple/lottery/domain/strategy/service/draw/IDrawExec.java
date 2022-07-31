@@ -1,7 +1,7 @@
 package com.simple.lottery.domain.strategy.service.draw;
 
 import com.simple.lottery.domain.strategy.model.request.DrawRequest;
-import com.simple.lottery.domain.strategy.model.response.DrawResponse;
+import com.simple.lottery.domain.strategy.model.result.DrawResult;
 
 /**
  * 项目: simple-lottery
@@ -19,5 +19,5 @@ public interface IDrawExec {
      * @param req 抽奖参数；用户ID、策略ID
      * @return    中奖结果
      */
-    DrawResponse doDrawExec(DrawRequest req);
+    DrawResult doDrawExec(DrawRequest req);
 }

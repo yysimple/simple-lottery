@@ -5,7 +5,7 @@ import com.simple.lottery.common.enums.ActivityState;
 import com.simple.lottery.domain.activity.model.aggregates.ActivityInfoLimitPageRich;
 import com.simple.lottery.domain.activity.model.request.ActivityInfoLimitPageRequest;
 import com.simple.lottery.domain.activity.model.request.PartakeRequest;
-import com.simple.lottery.domain.activity.model.response.StockResponse;
+import com.simple.lottery.domain.activity.model.result.StockResult;
 import com.simple.lottery.domain.activity.model.vo.*;
 
 import java.util.List;
@@ -90,7 +90,7 @@ public interface IActivityRepository {
      * @param stockCount 总库存
      * @return 扣减结果
      */
-    SimpleResponse<StockResponse> subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount);
+    SimpleResponse<StockResult> subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount);
 
     /**
      * 恢复活动库存，通过Redis 【如果非常异常，则需要进行缓存库存恢复，只保证不超卖的特性，所以不保证一定能恢复占用库存，另外最终可以由任务进行补偿库存】

@@ -1,6 +1,7 @@
-package com.simple.lottery.domain.activity.model.response;
+package com.simple.lottery.domain.activity.model.result;
 
-import lombok.Data;
+import com.simple.lottery.common.entity.Result;
+import lombok.*;
 
 /**
  * 项目: simple-lottery
@@ -10,8 +11,10 @@ import lombok.Data;
  * @author: WuChengXing
  * @create: 2022-07-31 13:49
  **/
-@Data
-public class PartakeResponse {
+@Getter
+@Setter
+@ToString
+public class PartakeResult extends Result {
 
     /**
      * 策略ID
@@ -29,4 +32,10 @@ public class PartakeResponse {
      * activity 库存剩余
      */
     private Integer stockSurplusCount;
+
+    public PartakeResult(String code, String info) {
+        super(code, info);
+    }
+
+
 }
