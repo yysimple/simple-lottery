@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class AirResponse<T> {
     protected Boolean status = true;
-    protected Integer errorCode;
-    protected String errorMessage;
+    protected String code;
+    protected String message;
     protected T data;
 }

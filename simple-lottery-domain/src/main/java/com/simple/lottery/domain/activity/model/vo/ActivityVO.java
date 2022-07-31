@@ -16,6 +16,11 @@ import java.util.Date;
 public class ActivityVO {
 
     /**
+     * 自增ID
+     */
+    private Long id;
+
+    /**
      * 活动ID
      */
     private Long activityId;
@@ -46,9 +51,19 @@ public class ActivityVO {
     private Integer stockCount;
 
     /**
+     * 库存剩余
+     */
+    private Integer stockSurplusCount;
+
+    /**
      * 每人可参与次数
      */
     private Integer takeCount;
+
+    /**
+     * 策略ID
+     */
+    private Long strategyId;
 
     /**
      * 活动状态：编辑、提审、撤审、通过、运行、拒绝、关闭、开启
@@ -59,4 +74,14 @@ public class ActivityVO {
      * 创建人
      */
     private String creator;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 修改时间
+     */
+    private Date updateTime;
 }
