@@ -26,6 +26,11 @@ public class Activity {
     private Long activityId;
 
     /**
+     * 策略ID
+     */
+    private Long strategyId;
+
+    /**
      * 活动名称
      */
     private String activityName;
@@ -54,6 +59,11 @@ public class Activity {
      * 每人可参与次数
      */
     private Integer takeCount;
+
+    /**
+     * 库存剩余
+     */
+    private Integer stockSurplusCount;
 
     /**
      * 活动状态：编辑、提审、撤审、通过、运行、拒绝、关闭、开启
