@@ -1,16 +1,20 @@
 package com.simple.lottery.infrastructure.repository;
 
+import com.simple.lottery.common.constant.RedisKeyConstant;
+import com.simple.lottery.common.entity.SimpleResponse;
 import com.simple.lottery.common.enums.ActivityState;
+import com.simple.lottery.common.enums.ResponseCode;
+import com.simple.lottery.domain.activity.model.aggregates.ActivityInfoLimitPageRich;
+import com.simple.lottery.domain.activity.model.request.ActivityInfoLimitPageRequest;
+import com.simple.lottery.domain.activity.model.request.PartakeRequest;
+import com.simple.lottery.domain.activity.model.response.StockResponse;
 import com.simple.lottery.domain.activity.model.vo.*;
 import com.simple.lottery.domain.activity.repository.IActivityRepository;
-import com.simple.lottery.infrastructure.entity.Activity;
-import com.simple.lottery.infrastructure.entity.Award;
-import com.simple.lottery.infrastructure.entity.Strategy;
-import com.simple.lottery.infrastructure.entity.StrategyDetail;
-import com.simple.lottery.infrastructure.mapper.ActivityMapper;
-import com.simple.lottery.infrastructure.mapper.AwardMapper;
-import com.simple.lottery.infrastructure.mapper.StrategyDetailMapper;
-import com.simple.lottery.infrastructure.mapper.StrategyMapper;
+import com.simple.lottery.infrastructure.entity.*;
+import com.simple.lottery.infrastructure.mapper.*;
+import com.simple.lottery.infrastructure.util.RedisUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 
 import javax.annotation.Resource;
@@ -27,6 +31,8 @@ import java.util.List;
  **/
 public class ActivityRepository implements IActivityRepository {
 
+    private final Logger logger = LoggerFactory.getLogger(ActivityRepository.class);
+
     @Resource
     private ActivityMapper activityMapper;
     @Resource
@@ -35,6 +41,12 @@ public class ActivityRepository implements IActivityRepository {
     private StrategyMapper strategyMapper;
     @Resource
     private StrategyDetailMapper strategyDetailMapper;
+
+    @Resource
+    private UserTakeActivityCountMapper userTakeActivityCountMapper;
+
+    @Resource
+    private RedisUtil redisUtil;
 
     @Override
     public void addActivity(ActivityVO activity) {
@@ -77,5 +89,122 @@ public class ActivityRepository implements IActivityRepository {
         AlterStateVO alterStateVO = new AlterStateVO(activityId, ((ActivityState) beforeState).getCode(), ((ActivityState) afterState).getCode());
         int count = activityMapper.alterState(alterStateVO);
         return 1 == count;
+    }
+
+    @Override
+    public ActivityBillVO queryActivityBill(PartakeRequest req) {
+
+        // 查询活动信息
+        Activity activity = activityMapper.queryActivityById(req.getActivityId());
+
+        // 从缓存中获取库存
+        Object usedStockCountObj = redisUtil.get(RedisKeyConstant.KEY_LOTTERY_ACTIVITY_STOCK_COUNT(req.getActivityId()));
+
+        // 查询领取次数
+        UserTakeActivityCount userTakeActivityCountReq = new UserTakeActivityCount();
+        userTakeActivityCountReq.setUId(req.getUId());
+        userTakeActivityCountReq.setActivityId(req.getActivityId());
+        UserTakeActivityCount userTakeActivityCount = userTakeActivityCountMapper.queryUserTakeActivityCount(userTakeActivityCountReq);
+
+        // 封装结果信息
+        ActivityBillVO activityBillVO = new ActivityBillVO();
+        activityBillVO.setUId(req.getUId());
+        activityBillVO.setActivityId(req.getActivityId());
+        activityBillVO.setActivityName(activity.getActivityName());
+        activityBillVO.setBeginDateTime(activity.getBeginDateTime());
+        activityBillVO.setEndDateTime(activity.getEndDateTime());
+        activityBillVO.setTakeCount(activity.getTakeCount());
+        activityBillVO.setStockCount(activity.getStockCount());
+        activityBillVO.setStockSurplusCount(null == usedStockCountObj ? activity.getStockSurplusCount() : activity.getStockCount() - Integer.parseInt(String.valueOf(usedStockCountObj)));
+        activityBillVO.setStrategyId(activity.getStrategyId());
+        activityBillVO.setState(activity.getState());
+        activityBillVO.setUserTakeLeftCount(null == userTakeActivityCount ? null : userTakeActivityCount.getLeftCount());
+
+        return activityBillVO;
+    }
+
+    @Override
+    public int subtractionActivityStock(Long activityId) {
+        return activityMapper.subtractionActivityStock(activityId);
+    }
+
+    @Override
+    public List<ActivityVO> scanToDoActivityList(Long id) {
+        List<Activity> activityList = activityMapper.scanToDoActivityList(id);
+        List<ActivityVO> activityVOList = new ArrayList<>(activityList.size());
+        for (Activity activity : activityList) {
+            ActivityVO activityVO = new ActivityVO();
+            activityVO.setId(activity.getId());
+            activityVO.setActivityId(activity.getActivityId());
+            activityVO.setActivityName(activity.getActivityName());
+            activityVO.setBeginDateTime(activity.getBeginDateTime());
+            activityVO.setEndDateTime(activity.getEndDateTime());
+            activityVO.setState(activity.getState());
+            activityVOList.add(activityVO);
+        }
+        return activityVOList;
+    }
+
+    @Override
+    public SimpleResponse<StockResponse> subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount) {
+
+        //  1. 获取抽奖活动库存 Key
+        String stockKey = RedisKeyConstant.KEY_LOTTERY_ACTIVITY_STOCK_COUNT(activityId);
+
+        // 2. 扣减库存，目前占用库存数
+        Integer stockUsedCount = (int) redisUtil.incr(stockKey, 1);
+
+        // 3. 超出库存判断，进行恢复原始库存
+        if (stockUsedCount > stockCount) {
+            redisUtil.decr(stockKey, 1);
+            return SimpleResponse.error(ResponseCode.OUT_OF_STOCK.getCode(), ResponseCode.OUT_OF_STOCK.getInfo());
+        }
+
+        // 4. 以活动库存占用编号，生成对应加锁Key，细化锁的颗粒度
+        String stockTokenKey = RedisKeyConstant.KEY_LOTTERY_ACTIVITY_STOCK_COUNT_TOKEN(activityId, stockUsedCount);
+
+        // 5. 使用 Redis.setNx 加一个分布式锁
+        boolean lockToken = redisUtil.setNx(stockTokenKey, 350L);
+        if (!lockToken) {
+            logger.info("抽奖活动{}用户秒杀{}扣减库存，分布式锁失败：{}", activityId, uId, stockTokenKey);
+            return SimpleResponse.error(ResponseCode.ERR_TOKEN.getCode(), ResponseCode.ERR_TOKEN.getInfo());
+        }
+
+        return new SimpleResponse<>(new StockResponse(stockTokenKey, stockCount - stockUsedCount));
+    }
+
+    @Override
+    public void recoverActivityCacheStockByRedis(Long activityId, String tokenKey, String code) {
+        // 删除分布式锁 Key
+        redisUtil.del(tokenKey);
+    }
+
+    @Override
+    public ActivityInfoLimitPageRich queryActivityInfoLimitPage(ActivityInfoLimitPageRequest req) {
+        Long count = activityMapper.queryActivityInfoCount(req);
+        List<Activity> list = activityMapper.queryActivityInfoList(req);
+
+        List<ActivityVO> activityVOList = new ArrayList<>();
+        for (Activity activity : list) {
+            ActivityVO activityVO = new ActivityVO();
+            activityVO.setId(activity.getId());
+            activityVO.setActivityId(activity.getActivityId());
+            activityVO.setActivityName(activity.getActivityName());
+            activityVO.setActivityDesc(activity.getActivityDesc());
+            activityVO.setBeginDateTime(activity.getBeginDateTime());
+            activityVO.setEndDateTime(activity.getEndDateTime());
+            activityVO.setStockCount(activity.getStockCount());
+            activityVO.setStockSurplusCount(activity.getStockSurplusCount());
+            activityVO.setTakeCount(activity.getTakeCount());
+            activityVO.setStrategyId(activity.getStrategyId());
+            activityVO.setState(activity.getState());
+            activityVO.setCreator(activity.getCreator());
+            activityVO.setCreateTime(activity.getCreateTime());
+            activityVO.setUpdateTime(activity.getUpdateTime());
+
+            activityVOList.add(activityVO);
+        }
+
+        return new ActivityInfoLimitPageRich(count, activityVOList);
     }
 }
