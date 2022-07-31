@@ -90,14 +90,14 @@ public interface IActivityRepository {
      * @param stockCount 总库存
      * @return 扣减结果
      */
-    SimpleResponse<StockResult> subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount);
+    StockResult subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount);
 
     /**
      * 恢复活动库存，通过Redis 【如果非常异常，则需要进行缓存库存恢复，只保证不超卖的特性，所以不保证一定能恢复占用库存，另外最终可以由任务进行补偿库存】
      *
-     * @param activityId 活动ID
-     * @param tokenKey   分布式 KEY 用于清理
-     * @param code       状态
+     * @param activityId    活动ID
+     * @param tokenKey      分布式 KEY 用于清理
+     * @param code          状态
      */
     void recoverActivityCacheStockByRedis(Long activityId, String tokenKey, String code);
 
@@ -105,7 +105,7 @@ public interface IActivityRepository {
      * 查询活动分页查询聚合对象
      *
      * @param req 请求参数；分页、活动
-     * @return 查询结果
+     * @return    查询结果
      */
     ActivityInfoLimitPageRich queryActivityInfoLimitPage(ActivityInfoLimitPageRequest req);
 }

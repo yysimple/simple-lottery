@@ -28,4 +28,10 @@ public class StockResult extends Result {
     public StockResult(String code, String info) {
         super(code, info);
     }
+
+    public StockResult(String code, String info, String stockKey, Integer stockSurplusCount) {
+        super(code, info);
+        this.stockKey = stockKey;
+        this.stockSurplusCount = stockSurplusCount;
+    }
 }

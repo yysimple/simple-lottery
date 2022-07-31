@@ -1,11 +1,13 @@
 package com.simple.lottery.domain.activity.service.partake.impl;
 
+import com.simple.dbrouter.strategy.DbRouterStrategy;
+import com.simple.lottery.common.entity.Result;
 import com.simple.lottery.common.entity.SimpleResponse;
 import com.simple.lottery.common.enums.ActivityState;
 import com.simple.lottery.common.enums.ResponseCode;
 import com.simple.lottery.domain.activity.model.request.PartakeRequest;
-import com.simple.lottery.domain.activity.model.vo.ActivityBillVO;
-import com.simple.lottery.domain.activity.model.vo.UserTakeActivityVO;
+import com.simple.lottery.domain.activity.model.result.StockResult;
+import com.simple.lottery.domain.activity.model.vo.*;
 import com.simple.lottery.domain.activity.repository.IUserTakeActivityRepository;
 import com.simple.lottery.domain.activity.service.partake.BaseActivityPartake;
 import org.slf4j.Logger;
@@ -37,7 +39,7 @@ public class ActivityPartakeImpl extends BaseActivityPartake {
     private TransactionTemplate transactionTemplate;
 
     @Resource
-    private IDBRouterStrategy dbRouter;
+    private DbRouterStrategy dbRouter;
 
     @Override
     protected UserTakeActivityVO queryNoConsumedTakeActivityOrder(Long activityId, String uId) {
@@ -45,42 +47,42 @@ public class ActivityPartakeImpl extends BaseActivityPartake {
     }
 
     @Override
-    protected SimpleResponse checkActivityBill(PartakeRequest partake, ActivityBillVO bill) {
+    protected Result checkActivityBill(PartakeRequest partake, ActivityBillVO bill) {
         // 校验：活动状态
         if (!ActivityState.DOING.getCode().equals(bill.getState())) {
             logger.warn("活动当前状态非可用 state：{}", bill.getState());
-            return SimpleResponse.error(ResponseCode.UN_ERROR.getCode(), "活动当前状态非可用");
+            return Result.buildResult(ResponseCode.UN_ERROR, "活动当前状态非可用");
         }
 
         // 校验：活动日期
         if (bill.getBeginDateTime().after(partake.getPartakeDate()) || bill.getEndDateTime().before(partake.getPartakeDate())) {
             logger.warn("活动时间范围非可用 beginDateTime：{} endDateTime：{}", bill.getBeginDateTime(), bill.getEndDateTime());
-            return SimpleResponse.error(ResponseCode.UN_ERROR.getCode(), "活动时间范围非可用");
+            return Result.buildResult(ResponseCode.UN_ERROR, "活动时间范围非可用");
         }
 
         // 校验：活动库存
         if (bill.getStockSurplusCount() <= 0) {
             logger.warn("活动剩余库存非可用 stockSurplusCount：{}", bill.getStockSurplusCount());
-            return SimpleResponse.error(ResponseCode.UN_ERROR.getCode(), "活动剩余库存非可用");
+            return Result.buildResult(ResponseCode.UN_ERROR, "活动剩余库存非可用");
         }
 
         // 校验：个人库存 - 个人活动剩余可领取次数
         if (null != bill.getUserTakeLeftCount() && bill.getUserTakeLeftCount() <= 0) {
             logger.warn("个人领取次数非可用 userTakeLeftCount：{}", bill.getUserTakeLeftCount());
-            return SimpleResponse.error(ResponseCode.UN_ERROR.getCode(), "个人领取次数非可用");
+            return Result.buildResult(ResponseCode.UN_ERROR, "个人领取次数非可用");
         }
 
-        return SimpleResponse.success();
+        return Result.buildSuccessResult();
     }
 
     @Override
-    protected SimpleResponse subtractionActivityStock(PartakeRequest req) {
+    protected Result subtractionActivityStock(PartakeRequest req) {
         int count = activityRepository.subtractionActivityStock(req.getActivityId());
         if (0 == count) {
             logger.error("扣减活动库存失败 activityId：{}", req.getActivityId());
-            return SimpleResponse.error(ResponseCode.NO_UPDATE.getCode(), ResponseCode.NO_UPDATE.getInfo());
+            return Result.buildResult(ResponseCode.NO_UPDATE);
         }
-        return SimpleResponse.success();
+        return Result.buildSuccessResult();
     }
 
     @Override
@@ -94,25 +96,25 @@ public class ActivityPartakeImpl extends BaseActivityPartake {
     }
 
     @Override
-    protected Result grabActivity(PartakeReq partake, ActivityBillVO bill, Long takeId) {
+    protected Result grabActivity(PartakeRequest partake, ActivityBillVO bill, Long takeId) {
         try {
-            dbRouter.doRouter(partake.getuId());
+            dbRouter.doRouter(partake.getUId());
             return transactionTemplate.execute(status -> {
                 try {
                     // 扣减个人已参与次数
-                    int updateCount = userTakeActivityRepository.subtractionLeftCount(bill.getActivityId(), bill.getActivityName(), bill.getTakeCount(), bill.getUserTakeLeftCount(), partake.getuId());
+                    int updateCount = userTakeActivityRepository.subtractionLeftCount(bill.getActivityId(), bill.getActivityName(), bill.getTakeCount(), bill.getUserTakeLeftCount(), partake.getUId());
                     if (0 == updateCount) {
                         status.setRollbackOnly();
-                        logger.error("领取活动，扣减个人已参与次数失败 activityId：{} uId：{}", partake.getActivityId(), partake.getuId());
-                        return Result.buildResult(Constants.ResponseCode.NO_UPDATE);
+                        logger.error("领取活动，扣减个人已参与次数失败 activityId：{} uId：{}", partake.getActivityId(), partake.getUId());
+                        return Result.buildResult(ResponseCode.NO_UPDATE);
                     }
 
                     // 写入领取活动记录
-                    userTakeActivityRepository.takeActivity(bill.getActivityId(), bill.getActivityName(), bill.getStrategyId(), bill.getTakeCount(), bill.getUserTakeLeftCount(), partake.getuId(), partake.getPartakeDate(), takeId);
+                    userTakeActivityRepository.takeActivity(bill.getActivityId(), bill.getActivityName(), bill.getStrategyId(), bill.getTakeCount(), bill.getUserTakeLeftCount(), partake.getUId(), partake.getPartakeDate(), takeId);
                 } catch (DuplicateKeyException e) {
                     status.setRollbackOnly();
-                    logger.error("领取活动，唯一索引冲突 activityId：{} uId：{}", partake.getActivityId(), partake.getuId(), e);
-                    return Result.buildResult(Constants.ResponseCode.INDEX_DUP);
+                    logger.error("领取活动，唯一索引冲突 activityId：{} uId：{}", partake.getActivityId(), partake.getUId(), e);
+                    return Result.buildResult(ResponseCode.INDEX_DUP);
                 }
                 return Result.buildSuccessResult();
             });
@@ -124,23 +126,23 @@ public class ActivityPartakeImpl extends BaseActivityPartake {
     @Override
     public Result recordDrawOrder(DrawOrderVO drawOrder) {
         try {
-            dbRouter.doRouter(drawOrder.getuId());
+            dbRouter.doRouter(drawOrder.getUId());
             return transactionTemplate.execute(status -> {
                 try {
                     // 锁定活动领取记录
-                    int lockCount = userTakeActivityRepository.lockTackActivity(drawOrder.getuId(), drawOrder.getActivityId(), drawOrder.getTakeId());
+                    int lockCount = userTakeActivityRepository.lockTackActivity(drawOrder.getUId(), drawOrder.getActivityId(), drawOrder.getTakeId());
                     if (0 == lockCount) {
                         status.setRollbackOnly();
-                        logger.error("记录中奖单，个人参与活动抽奖已消耗完 activityId：{} uId：{}", drawOrder.getActivityId(), drawOrder.getuId());
-                        return Result.buildResult(Constants.ResponseCode.NO_UPDATE);
+                        logger.error("记录中奖单，个人参与活动抽奖已消耗完 activityId：{} uId：{}", drawOrder.getActivityId(), drawOrder.getUId());
+                        return Result.buildResult(ResponseCode.NO_UPDATE);
                     }
 
                     // 保存抽奖信息
                     userTakeActivityRepository.saveUserStrategyExport(drawOrder);
                 } catch (DuplicateKeyException e) {
                     status.setRollbackOnly();
-                    logger.error("记录中奖单，唯一索引冲突 activityId：{} uId：{}", drawOrder.getActivityId(), drawOrder.getuId(), e);
-                    return Result.buildResult(Constants.ResponseCode.INDEX_DUP);
+                    logger.error("记录中奖单，唯一索引冲突 activityId：{} uId：{}", drawOrder.getActivityId(), drawOrder.getUId(), e);
+                    return Result.buildResult(ResponseCode.INDEX_DUP);
                 }
                 return Result.buildSuccessResult();
             });
@@ -159,8 +161,8 @@ public class ActivityPartakeImpl extends BaseActivityPartake {
     public List<InvoiceVO> scanInvoiceMqState(int dbCount, int tbCount) {
         try {
             // 设置路由
-            dbRouter.setDBKey(dbCount);
-            dbRouter.setTBKey(tbCount);
+            dbRouter.setDbKey(dbCount);
+            dbRouter.setTableKey(tbCount);
 
             // 查询数据
             return userTakeActivityRepository.scanInvoiceMqState();

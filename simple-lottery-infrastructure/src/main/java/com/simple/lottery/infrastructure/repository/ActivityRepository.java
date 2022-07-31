@@ -1,7 +1,6 @@
 package com.simple.lottery.infrastructure.repository;
 
 import com.simple.lottery.common.constant.RedisKeyConstant;
-import com.simple.lottery.common.entity.SimpleResponse;
 import com.simple.lottery.common.enums.ActivityState;
 import com.simple.lottery.common.enums.ResponseCode;
 import com.simple.lottery.domain.activity.model.aggregates.ActivityInfoLimitPageRich;
@@ -15,7 +14,6 @@ import com.simple.lottery.infrastructure.mapper.*;
 import com.simple.lottery.infrastructure.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeanUtils;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
@@ -51,8 +49,25 @@ public class ActivityRepository implements IActivityRepository {
     @Override
     public void addActivity(ActivityVO activity) {
         Activity req = new Activity();
-        BeanUtils.copyProperties(activity, req);
+        req.setId(activity.getId());
+        req.setActivityId(activity.getActivityId());
+        req.setActivityName(activity.getActivityName());
+        req.setActivityDesc(activity.getActivityDesc());
+        req.setBeginDateTime(activity.getBeginDateTime());
+        req.setEndDateTime(activity.getEndDateTime());
+        req.setStockCount(activity.getStockCount());
+        req.setStockSurplusCount(activity.getStockSurplusCount());
+        req.setTakeCount(activity.getTakeCount());
+        req.setStrategyId(activity.getStrategyId());
+        req.setState(activity.getState());
+        req.setCreator(activity.getCreator());
+        req.setCreateTime(activity.getCreateTime());
+        req.setUpdateTime(activity.getUpdateTime());
+
         activityMapper.insert(req);
+
+        // 设置活动库存 KEY
+        redisUtil.set(RedisKeyConstant.KEY_LOTTERY_ACTIVITY_STOCK_COUNT(activity.getActivityId()), 0);
     }
 
     @Override
@@ -60,7 +75,10 @@ public class ActivityRepository implements IActivityRepository {
         List<Award> req = new ArrayList<>();
         for (AwardVO awardVO : awardList) {
             Award award = new Award();
-            BeanUtils.copyProperties(awardVO, award);
+            award.setAwardId(awardVO.getAwardId());
+            award.setAwardType(awardVO.getAwardType());
+            award.setAwardName(awardVO.getAwardName());
+            award.setAwardContent(awardVO.getAwardContent());
             req.add(award);
         }
         awardMapper.insertList(req);
@@ -69,7 +87,13 @@ public class ActivityRepository implements IActivityRepository {
     @Override
     public void addStrategy(StrategyVO strategy) {
         Strategy req = new Strategy();
-        BeanUtils.copyProperties(strategy, req);
+        req.setStrategyId(strategy.getStrategyId());
+        req.setStrategyDesc(strategy.getStrategyDesc());
+        req.setStrategyMode(strategy.getStrategyMode());
+        req.setGrantType(strategy.getGrantType());
+        req.setGrantDate(strategy.getGrantDate());
+        req.setExtInfo(strategy.getExtInfo());
+
         strategyMapper.insert(req);
     }
 
@@ -78,7 +102,12 @@ public class ActivityRepository implements IActivityRepository {
         List<StrategyDetail> req = new ArrayList<>();
         for (StrategyDetailVO strategyDetailVO : strategyDetailList) {
             StrategyDetail strategyDetail = new StrategyDetail();
-            BeanUtils.copyProperties(strategyDetailVO, strategyDetail);
+            strategyDetail.setStrategyId(strategyDetailVO.getStrategyId());
+            strategyDetail.setAwardId(strategyDetailVO.getAwardId());
+            strategyDetail.setAwardName(strategyDetailVO.getAwardName());
+            strategyDetail.setAwardCount(strategyDetailVO.getAwardCount());
+            strategyDetail.setAwardSurplusCount(strategyDetailVO.getAwardSurplusCount());
+            strategyDetail.setAwardRate(strategyDetailVO.getAwardRate());
             req.add(strategyDetail);
         }
         strategyDetailMapper.insertList(req);
@@ -146,7 +175,7 @@ public class ActivityRepository implements IActivityRepository {
     }
 
     @Override
-    public SimpleResponse<StockResult> subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount) {
+    public StockResult subtractionActivityStockByRedis(String uId, Long activityId, Integer stockCount) {
 
         //  1. 获取抽奖活动库存 Key
         String stockKey = RedisKeyConstant.KEY_LOTTERY_ACTIVITY_STOCK_COUNT(activityId);
@@ -157,7 +186,7 @@ public class ActivityRepository implements IActivityRepository {
         // 3. 超出库存判断，进行恢复原始库存
         if (stockUsedCount > stockCount) {
             redisUtil.decr(stockKey, 1);
-            return SimpleResponse.error(ResponseCode.OUT_OF_STOCK.getCode(), ResponseCode.OUT_OF_STOCK.getInfo());
+            return new StockResult(ResponseCode.OUT_OF_STOCK.getCode(), ResponseCode.OUT_OF_STOCK.getInfo());
         }
 
         // 4. 以活动库存占用编号，生成对应加锁Key，细化锁的颗粒度
@@ -167,10 +196,10 @@ public class ActivityRepository implements IActivityRepository {
         boolean lockToken = redisUtil.setNx(stockTokenKey, 350L);
         if (!lockToken) {
             logger.info("抽奖活动{}用户秒杀{}扣减库存，分布式锁失败：{}", activityId, uId, stockTokenKey);
-            return SimpleResponse.error(ResponseCode.ERR_TOKEN.getCode(), ResponseCode.ERR_TOKEN.getInfo());
+            return new StockResult(ResponseCode.ERR_TOKEN.getCode(), ResponseCode.ERR_TOKEN.getInfo());
         }
 
-        return new SimpleResponse<>(new StockResult(stockTokenKey, stockCount - stockUsedCount));
+        return new StockResult(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), stockTokenKey, stockCount - stockUsedCount);
     }
 
     @Override

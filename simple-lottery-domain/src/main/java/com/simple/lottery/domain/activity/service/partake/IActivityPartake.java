@@ -1,5 +1,6 @@
 package com.simple.lottery.domain.activity.service.partake;
 
+import com.simple.lottery.common.entity.Result;
 import com.simple.lottery.common.entity.SimpleResponse;
 import com.simple.lottery.domain.activity.model.request.PartakeRequest;
 import com.simple.lottery.domain.activity.model.result.PartakeResult;
@@ -21,10 +22,10 @@ public interface IActivityPartake {
     /**
      * 参与活动
      *
-     * @param request 入参
+     * @param req 入参
      * @return 领取结果
      */
-    SimpleResponse<PartakeResult> doPartake(PartakeRequest request);
+    PartakeResult doPartake(PartakeRequest req);
 
     /**
      * 保存奖品单
@@ -32,7 +33,7 @@ public interface IActivityPartake {
      * @param drawOrder 奖品单
      * @return 保存结果
      */
-    SimpleResponse<PartakeResult> recordDrawOrder(DrawOrderVO drawOrder);
+    Result recordDrawOrder(DrawOrderVO drawOrder);
 
     /**
      * 更新发货单 MQ 状态
@@ -55,7 +56,7 @@ public interface IActivityPartake {
     /**
      * 更新活动库存
      *
-     * @param activityPartakeRecordVO 活动领取记录
+     * @param activityPartakeRecordVO   活动领取记录
      */
     void updateActivityStock(ActivityPartakeRecordVO activityPartakeRecordVO);
 }
