@@ -1,5 +1,6 @@
 package com.simple.lottery.infrastructure.entity;
 
+import com.simple.lottery.domain.activity.model.vo.ActivityVO;
 import lombok.Data;
 
 import java.util.Date;
@@ -84,4 +85,23 @@ public class Activity {
      * 修改时间
      */
     private Date updateTime;
+
+    public static Activity vo2Entity(ActivityVO vo) {
+        Activity activity = new Activity();
+        activity.setId(vo.getId());
+        activity.setActivityId(vo.getActivityId());
+        activity.setStrategyId(vo.getStrategyId());
+        activity.setActivityName(vo.getActivityName());
+        activity.setActivityDesc(vo.getActivityDesc());
+        activity.setBeginDateTime(vo.getBeginDateTime());
+        activity.setEndDateTime(vo.getEndDateTime());
+        activity.setStockCount(vo.getStockCount());
+        activity.setTakeCount(vo.getTakeCount());
+        activity.setStockSurplusCount(vo.getStockSurplusCount());
+        activity.setState(vo.getState());
+        activity.setCreator(vo.getCreator());
+        activity.setCreateTime(vo.getCreateTime());
+        activity.setUpdateTime(vo.getUpdateTime());
+        return activity;
+    }
 }

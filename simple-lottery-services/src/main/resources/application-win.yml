@@ -64,7 +64,7 @@ spring:
   # redis.conf protected-mode yes 改为 protected-mode no
   redis:
     database: 0
-    host: 127.0.0.1     # Redis服务器地址，修改为你的地址
+    host: 192.168.31.100   # Redis服务器地址，修改为你的地址
     port: 6379          # Redis服务器连接端口
     password: 123456           # Redis服务器连接密码（默认为空）
     timeout: 3000       # Redis服务器链接超时配置

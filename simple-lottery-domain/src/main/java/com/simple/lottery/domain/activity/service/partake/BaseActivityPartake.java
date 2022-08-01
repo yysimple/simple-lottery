@@ -41,14 +41,14 @@ public abstract class BaseActivityPartake extends ActivityPartakeSupport impleme
 
         // 3. 活动信息校验处理【活动库存、状态、日期、个人参与次数】
         Result checkResult = this.checkActivityBill(req, activityBillVO);
-        if (ResponseCode.SUCCESS.getCode().equals(checkResult.getCode())) {
+        if (!ResponseCode.SUCCESS.getCode().equals(checkResult.getCode())) {
             return new PartakeResult(checkResult.getCode(), checkResult.getInfo());
         }
 
         // 4. 扣减活动库存，通过Redis【活动库存扣减编号，作为锁的Key，缩小颗粒度】 Begin
         StockResult subtractionActivityResult = this.subtractionActivityStockByRedis(req.getUId(), req.getActivityId(), activityBillVO.getStockCount());
 
-        if (ResponseCode.SUCCESS.getCode().equals(subtractionActivityResult.getCode())) {
+        if (!ResponseCode.SUCCESS.getCode().equals(subtractionActivityResult.getCode())) {
             this.recoverActivityCacheStockByRedis(req.getActivityId(), subtractionActivityResult.getStockKey(), subtractionActivityResult.getCode());
             return new PartakeResult(subtractionActivityResult.getCode(), subtractionActivityResult.getInfo());
         }
@@ -56,7 +56,7 @@ public abstract class BaseActivityPartake extends ActivityPartakeSupport impleme
         // 5. 插入领取活动信息【个人用户把活动信息写入到用户表】
         Long takeId = idGeneratorMap.get(Ids.SnowFlake).nextId();
         Result grabResult = this.grabActivity(req, activityBillVO, takeId);
-        if (ResponseCode.SUCCESS.getCode().equals(grabResult.getCode())) {
+        if (!ResponseCode.SUCCESS.getCode().equals(grabResult.getCode())) {
             this.recoverActivityCacheStockByRedis(req.getActivityId(), subtractionActivityResult.getStockKey(), grabResult.getCode());
             return new PartakeResult(grabResult.getCode(), grabResult.getInfo());
         }

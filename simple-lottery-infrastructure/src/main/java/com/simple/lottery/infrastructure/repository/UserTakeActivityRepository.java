@@ -120,6 +120,7 @@ public class UserTakeActivityRepository implements IUserTakeActivityRepository {
         UserTakeActivity userTakeActivity = new UserTakeActivity();
         userTakeActivity.setUId(uId);
         userTakeActivity.setActivityId(activityId);
+        // 查询用户是否还存在中奖却未领取的记录
         UserTakeActivity noConsumedTakeActivityOrder = userTakeActivityMapper.queryNoConsumedTakeActivityOrder(userTakeActivity);
 
         // 未查询到符合的领取单，直接返回 NULL

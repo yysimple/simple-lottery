@@ -14,6 +14,7 @@ import com.simple.lottery.infrastructure.mapper.*;
 import com.simple.lottery.infrastructure.util.RedisUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.Resource;
@@ -49,27 +50,11 @@ public class ActivityRepository implements IActivityRepository {
     private RedisUtil redisUtil;
 
     @Override
-    public void addActivity(ActivityVO activity) {
+    public void addActivity(ActivityVO activityVO) {
         Activity req = new Activity();
-        req.setId(activity.getId());
-        req.setActivityId(activity.getActivityId());
-        req.setActivityName(activity.getActivityName());
-        req.setActivityDesc(activity.getActivityDesc());
-        req.setBeginDateTime(activity.getBeginDateTime());
-        req.setEndDateTime(activity.getEndDateTime());
-        req.setStockCount(activity.getStockCount());
-        req.setStockSurplusCount(activity.getStockSurplusCount());
-        req.setTakeCount(activity.getTakeCount());
-        req.setStrategyId(activity.getStrategyId());
-        req.setState(activity.getState());
-        req.setCreator(activity.getCreator());
-        req.setCreateTime(activity.getCreateTime());
-        req.setUpdateTime(activity.getUpdateTime());
-
-        activityMapper.insert(req);
-
+        activityMapper.insert(Activity.vo2Entity(activityVO));
         // 设置活动库存 KEY
-        redisUtil.set(RedisKeyConstant.KEY_LOTTERY_ACTIVITY_STOCK_COUNT(activity.getActivityId()), 0);
+        redisUtil.set(RedisKeyConstant.KEY_LOTTERY_ACTIVITY_STOCK_COUNT(activityVO.getActivityId()), 0);
     }
 
     @Override

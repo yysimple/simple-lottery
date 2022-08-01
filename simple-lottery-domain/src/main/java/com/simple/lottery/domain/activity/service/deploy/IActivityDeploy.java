@@ -17,7 +17,7 @@ public interface IActivityDeploy {
      *
      * @param req 活动配置信息
      */
-    void createActivity(ActivityConfigRequest req);
+    void createActivity(ActivityConfigRequest req) throws Exception;
 
     /**
      * 修改活动信息

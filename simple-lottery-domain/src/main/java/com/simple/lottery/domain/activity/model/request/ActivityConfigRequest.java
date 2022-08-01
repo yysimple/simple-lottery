@@ -1,7 +1,9 @@
 package com.simple.lottery.domain.activity.model.request;
 
 import com.simple.lottery.domain.activity.model.aggregates.ActivityConfigRich;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * 项目: simple-lottery
@@ -12,6 +14,8 @@ import lombok.Data;
  * @create: 2022-07-30 23:47
  **/
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class ActivityConfigRequest {
 
     /**
