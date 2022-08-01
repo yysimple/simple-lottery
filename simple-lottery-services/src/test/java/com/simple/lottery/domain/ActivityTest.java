@@ -2,10 +2,19 @@ package com.simple.lottery.domain;
 
 import com.alibaba.fastjson.JSON;
 import com.simple.lottery.common.enums.ActivityState;
+import com.simple.lottery.common.enums.AwardType;
+import com.simple.lottery.common.enums.Ids;
+import com.simple.lottery.common.enums.StrategyMode;
+import com.simple.lottery.domain.activity.model.request.PartakeRequest;
+import com.simple.lottery.domain.activity.model.result.PartakeResult;
+import com.simple.lottery.domain.activity.service.partake.IActivityPartake;
 import com.simple.lottery.domain.activity.service.stateflow.IStateHandler;
+import com.simple.lottery.domain.support.ids.IdGenerator;
 import com.simple.lottery.infrastructure.entity.Activity;
+import com.simple.lottery.infrastructure.entity.UserStrategyExport;
 import com.simple.lottery.infrastructure.entity.UserTakeActivity;
 import com.simple.lottery.infrastructure.mapper.ActivityMapper;
+import com.simple.lottery.infrastructure.mapper.UserStrategyExportMapper;
 import com.simple.lottery.infrastructure.mapper.UserTakeActivityMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,6 +25,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.Map;
 
 /**
  * 项目: simple-lottery
@@ -39,6 +49,16 @@ public class ActivityTest {
 
     @Resource
     private IStateHandler stateHandler;
+    
+    @Resource
+    private UserStrategyExportMapper userStrategyExportMapper;
+    
+    @Resource
+    private Map<Ids, IdGenerator> idGeneratorMap;
+
+    @Resource
+    private IActivityPartake activityPartake;
+    
 
     @Test
     public void testInsert() {
@@ -84,5 +104,41 @@ public class ActivityTest {
         userTakeActivity.setUuid("Uhdgkw766120d");
         userTakeActivityMapper.insert(userTakeActivity);
     }
+
+    @Test
+    public void test_insert() {
+        UserStrategyExport userStrategyExport = new UserStrategyExport();
+        userStrategyExport.setUId("Uhdgkw766120d");
+        userStrategyExport.setActivityId(idGeneratorMap.get(Ids.ShortCode).nextId());
+        userStrategyExport.setOrderId(idGeneratorMap.get(Ids.SnowFlake).nextId());
+        userStrategyExport.setStrategyId(idGeneratorMap.get(Ids.RandomNumeric).nextId());
+        userStrategyExport.setStrategyMode(StrategyMode.SINGLE.getCode());
+        userStrategyExport.setGrantType(1);
+        userStrategyExport.setGrantDate(new Date());
+        userStrategyExport.setGrantState(1);
+        userStrategyExport.setAwardId("1");
+        userStrategyExport.setAwardType(AwardType.DESC.getCode());
+        userStrategyExport.setAwardName("IMac");
+        userStrategyExport.setAwardContent("奖品描述");
+        userStrategyExport.setUuid(String.valueOf(userStrategyExport.getOrderId()));
+
+        userStrategyExportMapper.insert(userStrategyExport);
+    }
+
+    @Test
+    public void test_select() {
+        UserStrategyExport userStrategyExport = userStrategyExportMapper.queryUserStrategyExportByUId("Uhdgkw766120d");
+        logger.info("测试结果：{}", JSON.toJSONString(userStrategyExport));
+    }
+
+
+    @Test
+    public void test_activityPartake() {
+        PartakeRequest req = new PartakeRequest("Uhdgkw766120d", 100001L);
+        PartakeResult res = activityPartake.doPartake(req);
+        logger.info("请求参数：{}", JSON.toJSONString(req));
+        logger.info("测试结果：{}", JSON.toJSONString(res));
+    }
+
 
 }
