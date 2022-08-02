@@ -189,7 +189,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void test_createActivity() {
+    public void testCreateActivity() {
         try {
             activityDeploy.createActivity(new ActivityConfigRequest(100001L, activityConfigRich));
         } catch (Exception e) {
@@ -245,7 +245,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void test_insert() {
+    public void testUserStrategyExportInsert() {
         UserStrategyExport userStrategyExport = new UserStrategyExport();
         userStrategyExport.setUId("wcx144969");
         userStrategyExport.setActivityId(idGeneratorMap.get(Ids.ShortCode).nextId());
@@ -265,7 +265,7 @@ public class ActivityTest {
     }
 
     @Test
-    public void test_select() {
+    public void testUserStrategyExportSelect() {
         UserStrategyExport userStrategyExport = userStrategyExportMapper.queryUserStrategyExportByUId("Uhdgkw766120d");
         logger.info("测试结果：{}", JSON.toJSONString(userStrategyExport));
     }
