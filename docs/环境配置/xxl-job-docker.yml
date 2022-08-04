@@ -1,0 +1,33 @@
+version: '3.9'
+services:
+  xxl-job-admin:
+    image: lyr123456/xxl-admin:2.3.0
+    container_name: xxl-job-admin
+    networks:
+      - net-xxl
+    environment:
+      PARAMS: "--spring.datasource.url=jdbc:mysql://192.168.0.105:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&serverTimezone=Asia/Shanghai  --spring.datasource.username=root  --spring.datasource.password=lyr123456"
+    ports:
+      - 8080:8080
+    volumes:
+      - ./logs/:/data/applogs/xxl-job/
+  xxl-job-executor-sample-springboot:
+    image: lyr123456/xxl-job-executor-sample-springboot:2.3.0
+    container_name: xxl-job-executor
+    networks:
+      - net-xxl
+    ports:
+      - 9999:9999
+
+    environment:
+      PARAMS: "--xxl.job.admin.addresses=http://192.168.0.105:8080/xxl-job-admin --xxl.job.executor.ip=192.168.0.105"
+    depends_on:
+      - "xxl-job-admin"
+    links:
+      - "xxl-job-admin"
+    volumes:
+      - ./logs/:/data/applogs/xxl-job/
+networks:
+  net-xxl:
+    external: false
+
