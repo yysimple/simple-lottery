@@ -67,6 +67,12 @@
             <artifactId>simple-lottery-rpc</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.simple.lottery.app</groupId>
+            <artifactId>simple-lottery-app</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 
     <build>

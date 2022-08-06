@@ -11,6 +11,7 @@
         <result column="end_date_time" property="endDateTime"/>
         <result column="stock_count" property="stockCount"/>
         <result column="take_count" property="takeCount"/>
+        <result column="strategy_id" property="strategyId"/>
         <result column="state" property="state"/>
         <result column="creator" property="creator"/>
         <result column="create_time" property="createTime"/>
