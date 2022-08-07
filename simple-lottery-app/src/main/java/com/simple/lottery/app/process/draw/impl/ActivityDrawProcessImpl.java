@@ -3,6 +3,7 @@ package com.simple.lottery.app.process.draw.impl;
 import com.simple.lottery.app.process.draw.IActivityDrawProcess;
 import com.simple.lottery.app.process.draw.request.DrawProcessRequest;
 import com.simple.lottery.app.process.draw.result.DrawProcessResult;
+import com.simple.lottery.app.process.draw.result.RuleQuantificationCrowdResult;
 import com.simple.lottery.common.entity.Result;
 import com.simple.lottery.common.enums.*;
 import com.simple.lottery.domain.activity.model.request.PartakeRequest;
@@ -11,6 +12,9 @@ import com.simple.lottery.domain.activity.model.vo.ActivityPartakeRecordVO;
 import com.simple.lottery.domain.activity.model.vo.DrawOrderVO;
 import com.simple.lottery.domain.activity.model.vo.InvoiceVO;
 import com.simple.lottery.domain.activity.service.partake.IActivityPartake;
+import com.simple.lottery.domain.rule.model.request.DecisionMatterRequest;
+import com.simple.lottery.domain.rule.model.result.EngineResult;
+import com.simple.lottery.domain.rule.service.engine.EngineFilter;
 import com.simple.lottery.domain.strategy.model.request.DrawRequest;
 import com.simple.lottery.domain.strategy.model.result.DrawResult;
 import com.simple.lottery.domain.strategy.model.vo.DrawAwardVO;
@@ -46,8 +50,8 @@ public class ActivityDrawProcessImpl implements IActivityDrawProcess {
     @Resource
     private IDrawExec drawExec;
 
-//    @Resource(name = "ruleEngineHandle")
-//    private EngineFilter engineFilter;
+    @Resource(name = "ruleEngineHandle")
+    private EngineFilter engineFilter;
 
     @Resource
     private Map<Ids, IdGenerator> idGeneratorMap;
@@ -98,6 +102,22 @@ public class ActivityDrawProcessImpl implements IActivityDrawProcess {
         drawOrderVO.setAwardName(drawAwardVO.getAwardName());
         drawOrderVO.setAwardContent(drawAwardVO.getAwardContent());
         return drawOrderVO;
+    }
+
+    @Override
+    public RuleQuantificationCrowdResult doRuleQuantificationCrowd(DecisionMatterRequest req) {
+        // 1. 量化决策
+        EngineResult engineResult = engineFilter.process(req);
+
+        if (!engineResult.isSuccess()) {
+            return new RuleQuantificationCrowdResult(ResponseCode.RULE_ERR.getCode(), ResponseCode.RULE_ERR.getInfo());
+        }
+
+        // 2. 封装结果
+        RuleQuantificationCrowdResult ruleQuantificationCrowdResult = new RuleQuantificationCrowdResult(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo());
+        ruleQuantificationCrowdResult.setActivityId(Long.valueOf(engineResult.getNodeValue()));
+
+        return ruleQuantificationCrowdResult;
     }
 
     private InvoiceVO buildInvoiceVO(DrawOrderVO drawOrderVO) {

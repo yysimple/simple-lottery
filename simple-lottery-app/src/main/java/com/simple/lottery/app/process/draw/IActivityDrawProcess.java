@@ -3,6 +3,7 @@ package com.simple.lottery.app.process.draw;
 import com.simple.lottery.app.process.draw.request.DrawProcessRequest;
 import com.simple.lottery.app.process.draw.result.DrawProcessResult;
 import com.simple.lottery.app.process.draw.result.RuleQuantificationCrowdResult;
+import com.simple.lottery.domain.rule.model.request.DecisionMatterRequest;
 
 /**
  * 项目: simple-lottery
@@ -28,5 +29,5 @@ public interface IActivityDrawProcess {
      * @param req 规则请求
      * @return 量化结果，用户可以参与的活动ID
      */
-    //RuleQuantificationCrowdResult doRuleQuantificationCrowd(DecisionMatterReq req);
+    RuleQuantificationCrowdResult doRuleQuantificationCrowd(DecisionMatterRequest req);
 }
