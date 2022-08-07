@@ -1,7 +1,5 @@
-package com.simple.lottery.rpc;
+package com.simple.lottery.rpc.activity.deploy;
 
-import com.simple.lottery.rpc.dto.ActivityDto;
-import com.simple.lottery.rpc.request.ActivityRequest;
 
 /**
  * 项目: simple-lottery

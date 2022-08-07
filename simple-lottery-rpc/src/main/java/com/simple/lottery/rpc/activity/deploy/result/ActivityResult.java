@@ -1,4 +1,4 @@
-package com.simple.lottery.rpc.response;
+package com.simple.lottery.rpc.activity.deploy.result;
 
 import lombok.Data;
 
@@ -14,7 +14,7 @@ import java.util.Date;
  * @create: 2022-07-24 17:00
  **/
 @Data
-public class ActivityResponse implements Serializable {
+public class ActivityResult implements Serializable {
 
     private static final long serialVersionUID = -3330962358009663242L;
 

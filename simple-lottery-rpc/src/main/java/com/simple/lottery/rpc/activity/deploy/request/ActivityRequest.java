@@ -1,4 +1,4 @@
-package com.simple.lottery.rpc.request;
+package com.simple.lottery.rpc.activity.deploy.request;
 
 import lombok.Data;
 

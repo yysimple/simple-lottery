@@ -2,9 +2,9 @@ package com.simple.lottery.services.interfaces.rpc;
 
 import com.simple.lottery.infrastructure.entity.Activity;
 import com.simple.lottery.infrastructure.mapper.ActivityMapper;
-import com.simple.lottery.rpc.IActivityBooth;
-import com.simple.lottery.rpc.dto.ActivityDto;
-import com.simple.lottery.rpc.request.ActivityRequest;
+import com.simple.lottery.rpc.activity.deploy.IActivityBooth;
+import com.simple.lottery.rpc.activity.deploy.dto.ActivityDto;
+import com.simple.lottery.rpc.activity.deploy.request.ActivityRequest;
 import com.simple.rpc.common.annotation.SimpleRpcService;
 
 import javax.annotation.Resource;

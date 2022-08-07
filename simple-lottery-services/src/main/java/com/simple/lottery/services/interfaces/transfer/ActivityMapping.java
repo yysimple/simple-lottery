@@ -1,7 +1,7 @@
 package com.simple.lottery.services.interfaces.transfer;
 
 import com.simple.lottery.domain.activity.model.vo.ActivityVO;
-import com.simple.lottery.rpc.dto.ActivityDto;
+import com.simple.lottery.rpc.activity.deploy.dto.ActivityDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
