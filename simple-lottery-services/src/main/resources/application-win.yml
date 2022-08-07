@@ -7,6 +7,11 @@ simple:
     register:
       address: redis://192.168.31.100:6379
       password: 123456
+  # 分页配置
+  pagination:
+    enabled: true
+    page-field: pageIndex
+    size-field: pageSize
 
 # mybatis 相关配置
 mybatis:
