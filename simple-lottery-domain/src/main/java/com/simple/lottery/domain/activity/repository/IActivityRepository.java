@@ -7,6 +7,7 @@ import com.simple.lottery.domain.activity.model.request.ActivityInfoLimitPageReq
 import com.simple.lottery.domain.activity.model.request.PartakeRequest;
 import com.simple.lottery.domain.activity.model.result.StockResult;
 import com.simple.lottery.domain.activity.model.vo.*;
+import com.simple.pagination.util.Page;
 
 import java.util.List;
 
@@ -107,5 +108,5 @@ public interface IActivityRepository {
      * @param req 请求参数；分页、活动
      * @return    查询结果
      */
-    ActivityInfoLimitPageRich queryActivityInfoLimitPage(ActivityInfoLimitPageRequest req);
+    Page<ActivityVO> queryActivityInfoLimitPage(ActivityInfoLimitPageRequest req);
 }

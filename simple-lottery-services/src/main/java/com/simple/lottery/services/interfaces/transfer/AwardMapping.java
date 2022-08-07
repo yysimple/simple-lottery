@@ -10,5 +10,5 @@ import com.simple.lottery.domain.strategy.model.vo.DrawAwardVO;
  * @author: WuChengXing
  * @create: 2022-08-07 15:31
  **/
-public interface AwardMapping extends IMapping<DrawAwardVO, AwardDto>{
+public interface AwardMapping {
 }

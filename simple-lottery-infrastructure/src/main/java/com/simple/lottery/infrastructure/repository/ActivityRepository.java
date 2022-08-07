@@ -12,6 +12,7 @@ import com.simple.lottery.domain.activity.repository.IActivityRepository;
 import com.simple.lottery.infrastructure.entity.*;
 import com.simple.lottery.infrastructure.mapper.*;
 import com.simple.lottery.infrastructure.util.RedisUtil;
+import com.simple.pagination.util.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -196,31 +197,8 @@ public class ActivityRepository implements IActivityRepository {
     }
 
     @Override
-    public ActivityInfoLimitPageRich queryActivityInfoLimitPage(ActivityInfoLimitPageRequest req) {
-        Long count = activityMapper.queryActivityInfoCount(req);
-        List<Activity> list = activityMapper.queryActivityInfoList(req);
-
-        List<ActivityVO> activityVOList = new ArrayList<>();
-        for (Activity activity : list) {
-            ActivityVO activityVO = new ActivityVO();
-            activityVO.setId(activity.getId());
-            activityVO.setActivityId(activity.getActivityId());
-            activityVO.setActivityName(activity.getActivityName());
-            activityVO.setActivityDesc(activity.getActivityDesc());
-            activityVO.setBeginDateTime(activity.getBeginDateTime());
-            activityVO.setEndDateTime(activity.getEndDateTime());
-            activityVO.setStockCount(activity.getStockCount());
-            activityVO.setStockSurplusCount(activity.getStockSurplusCount());
-            activityVO.setTakeCount(activity.getTakeCount());
-            activityVO.setStrategyId(activity.getStrategyId());
-            activityVO.setState(activity.getState());
-            activityVO.setCreator(activity.getCreator());
-            activityVO.setCreateTime(activity.getCreateTime());
-            activityVO.setUpdateTime(activity.getUpdateTime());
-
-            activityVOList.add(activityVO);
-        }
-
-        return new ActivityInfoLimitPageRich(count, activityVOList);
+    public Page<ActivityVO> queryActivityInfoLimitPage(ActivityInfoLimitPageRequest req) {
+        List<ActivityVO> list = activityMapper.queryActivityInfoList(req);
+        return Page.of(list, req.getPageIndex(), req.getPageSize());
     }
 }

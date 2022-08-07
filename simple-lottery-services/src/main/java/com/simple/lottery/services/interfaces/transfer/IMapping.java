@@ -1,5 +1,6 @@
 package com.simple.lottery.services.interfaces.transfer;
 
+import com.simple.pagination.util.Page;
 import org.mapstruct.InheritConfiguration;
 import org.mapstruct.InheritInverseConfiguration;
 import org.mapstruct.MapperConfig;
@@ -45,6 +46,15 @@ public interface IMapping<SOURCE, TARGET> {
      */
     @InheritConfiguration(name = "sourceToTarget")
     List<TARGET> sourceToTarget(List<SOURCE> var1);
+
+    /**
+     * 映射同名属性，分页形式
+     *
+     * @param var1 源
+     * @return 结果
+     */
+    @InheritConfiguration(name = "sourceToTarget")
+    Page<TARGET> sourceToTargetPage(Page<SOURCE> var1);
 
     /**
      * 反向，映射同名属性，集合形式

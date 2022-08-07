@@ -1,9 +1,13 @@
 package com.simple.lottery.rpc.activity.deploy.result;
 
+import com.simple.lottery.common.entity.Result;
+import com.simple.lottery.rpc.activity.deploy.dto.ActivityDto;
+import com.simple.pagination.util.Page;
 import lombok.Data;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * 项目: simple-lottery
@@ -16,45 +20,19 @@ import java.util.Date;
 @Data
 public class ActivityResult implements Serializable {
 
-    private static final long serialVersionUID = -3330962358009663242L;
+    private static final long serialVersionUID = 4038924840792433307L;
+    private Result result;
+    private Page<ActivityDto> activityDTOList;
 
-    /**
-     * 活动ID
-     */
-    private Long activityId;
+    public ActivityResult() {
+    }
 
-    /**
-     * 活动名称
-     */
-    private String activityName;
+    public ActivityResult(Result result) {
+        this.result = result;
+    }
 
-    /**
-     * 活动描述
-     */
-    private String activityDesc;
-
-    /**
-     * 开始时间
-     */
-    private Date beginDateTime;
-
-    /**
-     * 结束时间
-     */
-    private Date endDateTime;
-
-    /**
-     * 库存
-     */
-    private Integer stockCount;
-
-    /**
-     * 每人可参与次数
-     */
-    private Integer takeCount;
-
-    /**
-     * 活动状态：编辑、提审、撤审、通过、运行、拒绝、关闭、开启
-     */
-    private Integer state;
+    public ActivityResult(Result result, Page<ActivityDto> activityDTOList) {
+        this.result = result;
+        this.activityDTOList = activityDTOList;
+    }
 }

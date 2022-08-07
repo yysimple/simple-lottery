@@ -1,6 +1,7 @@
 package com.simple.lottery.infrastructure.mapper;
 
 import com.simple.lottery.domain.activity.model.request.ActivityInfoLimitPageRequest;
+import com.simple.lottery.domain.activity.model.vo.ActivityVO;
 import com.simple.lottery.domain.activity.model.vo.AlterStateVO;
 import com.simple.lottery.infrastructure.entity.Activity;
 import org.apache.ibatis.annotations.Mapper;
@@ -78,5 +79,5 @@ public interface ActivityMapper {
      * @param req   入参
      * @return      结果
      */
-    List<Activity> queryActivityInfoList(ActivityInfoLimitPageRequest req);
+    List<ActivityVO> queryActivityInfoList(ActivityInfoLimitPageRequest req);
 }

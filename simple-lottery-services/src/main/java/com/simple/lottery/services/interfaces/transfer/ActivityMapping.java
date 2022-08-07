@@ -2,6 +2,7 @@ package com.simple.lottery.services.interfaces.transfer;
 
 import com.simple.lottery.domain.activity.model.vo.ActivityVO;
 import com.simple.lottery.rpc.activity.deploy.dto.ActivityDto;
+import com.simple.pagination.util.Page;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
 
@@ -26,4 +27,13 @@ public interface ActivityMapping extends IMapping<ActivityVO, ActivityDto> {
      */
     @Override
     List<ActivityDto> sourceToTarget(List<ActivityVO> activityVOS);
+
+    /**
+     * 分页拷贝
+     *
+     * @param page
+     * @return
+     */
+    @Override
+    Page<ActivityDto> sourceToTargetPage(Page<ActivityVO> page);
 }

@@ -102,7 +102,6 @@
             </if>
         </trim>
         ORDER BY id DESC
-        LIMIT #{pageBegin}, #{pageEnd}
     </select>
 
 </mapper>

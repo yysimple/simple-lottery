@@ -3,12 +3,14 @@ package com.simple.lottery.domain.activity.service.deploy.impl;
 import com.alibaba.fastjson.JSON;
 import com.simple.lottery.domain.activity.model.aggregates.ActivityConfigRich;
 import com.simple.lottery.domain.activity.model.request.ActivityConfigRequest;
+import com.simple.lottery.domain.activity.model.request.ActivityInfoLimitPageRequest;
 import com.simple.lottery.domain.activity.model.vo.ActivityVO;
 import com.simple.lottery.domain.activity.model.vo.AwardVO;
 import com.simple.lottery.domain.activity.model.vo.StrategyDetailVO;
 import com.simple.lottery.domain.activity.model.vo.StrategyVO;
 import com.simple.lottery.domain.activity.repository.IActivityRepository;
 import com.simple.lottery.domain.activity.service.deploy.IActivityDeploy;
+import com.simple.pagination.util.Page;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -35,7 +37,7 @@ public class ActivityDeployImpl implements IActivityDeploy {
     private IActivityRepository activityRepository;
 
     @Override
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     public void createActivity(ActivityConfigRequest req) throws Exception {
         logger.info("创建活动配置开始，activityId：{}", req.getActivityId());
         ActivityConfigRich activityConfigRich = req.getActivityConfigRich();
@@ -62,5 +64,15 @@ public class ActivityDeployImpl implements IActivityDeploy {
     @Override
     public void updateActivity(ActivityConfigRequest req) {
 
+    }
+
+    @Override
+    public List<ActivityVO> scanToDoActivityList(Long id) {
+        return activityRepository.scanToDoActivityList(id);
+    }
+
+    @Override
+    public Page<ActivityVO> queryActivityInfoLimitPage(ActivityInfoLimitPageRequest request) {
+        return activityRepository.queryActivityInfoLimitPage(request);
     }
 }
