@@ -12,6 +12,7 @@ simple:
     enabled: true
     page-field: pageIndex
     size-field: pageSize
+    sql-dialect: mysql
 
 # mybatis 相关配置
 mybatis:

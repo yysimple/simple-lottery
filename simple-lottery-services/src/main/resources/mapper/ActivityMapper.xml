@@ -63,7 +63,8 @@
         FROM activity
         WHERE id >= #{id}
           AND state in (4, 5)
-        ORDER BY ID ASC LIMIT 10
+        ORDER BY ID ASC
+        LIMIT 10
     </select>
 
     <update id="updateActivityStock" parameterType="com.simple.lottery.infrastructure.entity.Activity">
@@ -89,9 +90,21 @@
 
     <select id="queryActivityInfoList"
             parameterType="com.simple.lottery.domain.activity.model.request.ActivityInfoLimitPageRequest"
-            resultMap="activityMap">
-        SELECT id, activity_id, activity_name, activity_desc, begin_date_time, end_date_time,
-        stock_count, stock_surplus_count, take_count, strategy_id, state, creator, create_time, update_time
+            resultType="com.simple.lottery.domain.activity.model.vo.ActivityVO">
+        SELECT id as id,
+        activity_id as activityId,
+        activity_name as activityName,
+        activity_desc as activityDesc,
+        begin_date_time as beginDateTime,
+        end_date_time as endDateTime,
+        stock_count as stockCount,
+        stock_surplus_count as stockSurplusCount,
+        take_count as takeCount,
+        strategy_id as strategyId,
+        `state` as state,
+        creator as creator,
+        create_time as createTime,
+        update_time as updateTime
         FROM activity
         <trim prefix="where" prefixOverrides="AND | OR" suffixOverrides="and">
             <if test="null != activityId">

@@ -37,10 +37,13 @@ public class ActivityRepository implements IActivityRepository {
 
     @Resource
     private ActivityMapper activityMapper;
+
     @Resource
     private AwardMapper awardMapper;
+
     @Resource
     private StrategyMapper strategyMapper;
+
     @Resource
     private StrategyDetailMapper strategyDetailMapper;
 
