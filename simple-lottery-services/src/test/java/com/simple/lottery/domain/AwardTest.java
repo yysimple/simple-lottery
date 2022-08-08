@@ -44,7 +44,7 @@ public class AwardTest {
     private DistributionGoodsFactory distributionGoodsFactory;
 
     @Test
-    public void test_drawExec() {
+    public void testDrawExec() {
         drawExec.doDrawExec(new DrawRequest("wcx", 10001L));
         drawExec.doDrawExec(new DrawRequest("zyy", 10001L));
         drawExec.doDrawExec(new DrawRequest("ysq", 10001L));
@@ -53,7 +53,7 @@ public class AwardTest {
 
 
     @Test
-    public void test_award() {
+    public void testAward() {
         // 执行抽奖
         DrawResult drawResult = drawExec.doDrawExec(new DrawRequest("wcx", 10001L));
 

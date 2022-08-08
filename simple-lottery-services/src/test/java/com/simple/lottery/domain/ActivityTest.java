@@ -272,7 +272,7 @@ public class ActivityTest {
 
 
     @Test
-    public void test_activityPartake() {
+    public void testActivityPartake() {
         PartakeRequest req = new PartakeRequest("wcx144969", 100002L, new Date());
         PartakeResult res = activityPartake.doPartake(req);
         logger.info("请求参数：{}", JSON.toJSONString(req));
