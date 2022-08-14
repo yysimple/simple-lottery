@@ -44,7 +44,7 @@ public class LotteryActivityBoothTest {
     }
 
     @Test
-    public void test_doQuantificationDraw() {
+    public void testDoQuantificationDraw() {
         QuantificationDrawRequest req = new QuantificationDrawRequest();
         req.setUId("wcx");
         req.setTreeId(2110081902L);
