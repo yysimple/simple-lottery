@@ -1,5 +1,6 @@
 package com.simple.lottery.app.process.draw.impl;
 
+import com.simple.lottery.app.mq.producer.SimpleKafkaProducer;
 import com.simple.lottery.app.process.draw.IActivityDrawProcess;
 import com.simple.lottery.app.process.draw.request.DrawProcessRequest;
 import com.simple.lottery.app.process.draw.result.DrawProcessResult;
@@ -20,7 +21,6 @@ import com.simple.lottery.domain.strategy.model.result.DrawResult;
 import com.simple.lottery.domain.strategy.model.vo.DrawAwardVO;
 import com.simple.lottery.domain.strategy.service.draw.IDrawExec;
 import com.simple.lottery.domain.support.ids.IdGenerator;
-import org.apache.kafka.clients.producer.KafkaProducer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.support.SendResult;
@@ -56,33 +56,71 @@ public class ActivityDrawProcessImpl implements IActivityDrawProcess {
     @Resource
     private Map<Ids, IdGenerator> idGeneratorMap;
 
-//    @Resource
-//    private KafkaProducer kafkaProducer;
+    @Resource
+    private SimpleKafkaProducer simpleKafkaProducer;
 
     @Override
     public DrawProcessResult doDrawProcess(DrawProcessRequest req) {
         // 1. 领取活动
         PartakeResult partakeResult = activityPartake.doPartake(new PartakeRequest(req.getUId(), req.getActivityId()));
-        if (!ResponseCode.SUCCESS.getCode().equals(partakeResult.getCode())) {
+        if (!ResponseCode.SUCCESS.getCode().equals(partakeResult.getCode()) && !ResponseCode.NOT_CONSUMED_TAKE.getCode().equals(partakeResult.getCode())) {
             return new DrawProcessResult(partakeResult.getCode(), partakeResult.getInfo());
         }
+
+        // 2. 首次成功领取活动，发送 MQ 消息
+        if (ResponseCode.SUCCESS.getCode().equals(partakeResult.getCode())) {
+            ActivityPartakeRecordVO activityPartakeRecord = new ActivityPartakeRecordVO();
+            activityPartakeRecord.setUId(req.getUId());
+            activityPartakeRecord.setActivityId(req.getActivityId());
+            activityPartakeRecord.setStockCount(partakeResult.getStockCount());
+            activityPartakeRecord.setStockSurplusCount(partakeResult.getStockSurplusCount());
+            // 发送 MQ 消息
+            simpleKafkaProducer.sendLotteryActivityPartakeRecord(activityPartakeRecord);
+        }
+
         Long strategyId = partakeResult.getStrategyId();
         Long takeId = partakeResult.getTakeId();
 
-        // 2. 执行抽奖
-        DrawResult drawResult = drawExec.doDrawExec(new DrawRequest(req.getUId(), strategyId, String.valueOf(takeId)));
+        // 3. 执行抽奖
+        DrawResult drawResult = drawExec.doDrawExec(new DrawRequest(req.getUId(), strategyId));
         if (DrawState.FAIL.getCode().equals(drawResult.getDrawState())) {
             return new DrawProcessResult(ResponseCode.LOSING_DRAW.getCode(), ResponseCode.LOSING_DRAW.getInfo());
         }
-        DrawAwardVO drawAwardInfo = drawResult.getDrawAwardInfo();
+        DrawAwardVO drawAwardVO = drawResult.getDrawAwardInfo();
 
-        // 3. 结果落库
-        activityPartake.recordDrawOrder(buildDrawOrderVO(req, strategyId, takeId, drawAwardInfo));
+        // 4. 结果落库
+        DrawOrderVO drawOrderVO = buildDrawOrderVO(req, strategyId, takeId, drawAwardVO);
+        Result recordResult = activityPartake.recordDrawOrder(drawOrderVO);
+        if (!ResponseCode.SUCCESS.getCode().equals(recordResult.getCode())) {
+            return new DrawProcessResult(recordResult.getCode(), recordResult.getInfo());
+        }
 
-        // 4. 发送MQ，触发发奖流程
+        // 5. 发送MQ，触发发奖流程
+        InvoiceVO invoiceVO = buildInvoiceVO(drawOrderVO);
+        ListenableFuture<SendResult<String, Object>> future = simpleKafkaProducer.sendLotteryInvoice(invoiceVO);
+        // 处理kafka的回调
+        invoiceCallback(invoiceVO, future);
 
-        // 5. 返回结果
-        return new DrawProcessResult(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), drawAwardInfo);
+        // 6. 返回结果
+        return new DrawProcessResult(ResponseCode.SUCCESS.getCode(), ResponseCode.SUCCESS.getInfo(), drawAwardVO);
+    }
+
+    private void invoiceCallback(InvoiceVO invoiceVO, ListenableFuture<SendResult<String, Object>> future) {
+        future.addCallback(new ListenableFutureCallback<SendResult<String, Object>>() {
+
+            @Override
+            public void onSuccess(SendResult<String, Object> stringObjectSendResult) {
+                // MQ 消息发送完成，更新数据库表 user_strategy_export.mq_state = 1
+                activityPartake.updateInvoiceMqState(invoiceVO.getUId(), invoiceVO.getOrderId(), MQState.COMPLETE.getCode());
+            }
+
+            @Override
+            public void onFailure(Throwable throwable) {
+                // MQ 消息发送失败，更新数据库表 user_strategy_export.mq_state = 2 【等待定时任务扫码补偿MQ消息】
+                activityPartake.updateInvoiceMqState(invoiceVO.getUId(), invoiceVO.getOrderId(), MQState.FAIL.getCode());
+            }
+
+        });
     }
 
     private DrawOrderVO buildDrawOrderVO(DrawProcessRequest req, Long strategyId, Long takeId, DrawAwardVO drawAwardVO) {

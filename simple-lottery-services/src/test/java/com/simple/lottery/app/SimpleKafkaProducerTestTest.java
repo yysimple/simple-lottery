@@ -20,9 +20,9 @@ import javax.annotation.Resource;
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class KafkaProducerTestTest {
+public class SimpleKafkaProducerTestTest {
 
-    private final Logger logger = LoggerFactory.getLogger(KafkaProducerTestTest.class);
+    private final Logger logger = LoggerFactory.getLogger(SimpleKafkaProducerTestTest.class);
 
     @Resource
     private KafkaProducerTest kafkaProducerTest;

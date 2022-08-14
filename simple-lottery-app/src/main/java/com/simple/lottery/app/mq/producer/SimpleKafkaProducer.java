@@ -22,9 +22,9 @@ import javax.annotation.Resource;
  * @create: 2022-08-14 16:10
  **/
 @Component
-public class KafkaProducer {
+public class SimpleKafkaProducer {
 
-    private final Logger logger = LoggerFactory.getLogger(KafkaProducer.class);
+    private final Logger logger = LoggerFactory.getLogger(SimpleKafkaProducer.class);
 
     @Resource
     private KafkaTemplate<String, Object> kafkaTemplate;
