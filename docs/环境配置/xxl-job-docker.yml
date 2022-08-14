@@ -12,3 +12,6 @@ services:
 
 
 docker run -e PARAMS=" --server.port=7397 --spring.datasource.url=jdbc:mysql://127.0.0.1:3306/xxl_job?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8 --spring.datasource.username=root --spring.datasource.password=970412@wcx.com" -p 9999:8080 -v /logs/xxl-job:/data/applogs --name xxl-job-admin --restart=always  -d xuxueli/xxl-job-admin:2.3.0
+
+## 这里的话我自己在mac上面没有通过docker搭建成功，好像是因为docker网络的原因，所以我是修改了xxl的源码，然后打包成jar，然后在跑起来的
+nohup java -jar xxl-job-admin-2.3.0.jar &
