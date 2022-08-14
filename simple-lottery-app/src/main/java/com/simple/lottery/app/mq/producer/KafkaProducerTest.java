@@ -1,4 +1,4 @@
-package com.simple.lottery.app.mq;
+package com.simple.lottery.app.mq.producer;
 
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
@@ -20,9 +20,9 @@ import javax.annotation.Resource;
  * @create: 2022-08-14 14:05
  **/
 @Component
-public class KafkaProducer {
+public class KafkaProducerTest {
 
-    private final Logger logger = LoggerFactory.getLogger(KafkaProducer.class);
+    private final Logger logger = LoggerFactory.getLogger(KafkaProducerTest.class);
 
     @Resource
     private KafkaTemplate<String, Object> kafkaTemplate;

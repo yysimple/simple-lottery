@@ -1,6 +1,6 @@
 package com.simple.lottery.app;
 
-import com.simple.lottery.app.mq.KafkaProducer;
+import com.simple.lottery.app.mq.producer.KafkaProducerTest;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -20,18 +20,18 @@ import javax.annotation.Resource;
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class KafkaProducerTest {
+public class KafkaProducerTestTest {
 
-    private final Logger logger = LoggerFactory.getLogger(KafkaProducerTest.class);
+    private final Logger logger = LoggerFactory.getLogger(KafkaProducerTestTest.class);
 
     @Resource
-    private KafkaProducer kafkaProducer;
+    private KafkaProducerTest kafkaProducerTest;
 
     @Test
     public void testSend() throws InterruptedException {
         // 循环发送消息
         while (true) {
-            kafkaProducer.send("你好，我是Lottery 001");
+            kafkaProducerTest.send("你好，我是Lottery 001");
             Thread.sleep(3500);
         }
     }
