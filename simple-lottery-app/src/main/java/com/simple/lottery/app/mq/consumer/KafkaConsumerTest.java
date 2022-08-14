@@ -1,6 +1,7 @@
 package com.simple.lottery.app.mq.consumer;
 
 import com.simple.lottery.app.mq.producer.KafkaProducerTest;
+import com.simple.lottery.common.constant.MqConstant;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ import java.util.Optional;
 public class KafkaConsumerTest {
     private final Logger logger = LoggerFactory.getLogger(KafkaConsumerTest.class);
 
-    @KafkaListener(topics = KafkaProducerTest.TOPIC_TEST, groupId = KafkaProducerTest.TOPIC_GROUP)
+    @KafkaListener(topics = MqConstant.TOPIC_TEST, groupId = MqConstant.TOPIC_TEST_GROUP)
     public void topicTest(ConsumerRecord<?, ?> record, Acknowledgment ack, @Header(KafkaHeaders.RECEIVED_TOPIC) String topic) {
         Optional<?> message = Optional.ofNullable(record.value());
         if (message.isPresent()) {
