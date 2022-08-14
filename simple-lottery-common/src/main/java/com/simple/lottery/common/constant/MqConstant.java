@@ -20,6 +20,8 @@ public final class MqConstant {
      */
     public static final String TOPIC_ACTIVITY_PARTAKE = "simple_lottery_activity_partake";
 
+    public static final String SIMPLE_LOTTERY_GROUP = "simple_lottery";
+
     /**
      * 测试相关的操作
      */
