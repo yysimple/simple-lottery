@@ -73,17 +73,12 @@ spring:
     password: 123456
     timeout: 10000
 
-# xxl-job
-# 官网：https://github.com/xuxueli/xxl-job/
-# 地址：http://localhost:7397/xxl-job-admin 【需要先启动 xxl-job】
-# http://39.96.73.167:7397/xxl-job-admin
-# 账号：admin
-# 密码：123456
+# xxl-job 我这里是直接修改源码的，具体在docs里面
 xxl:
   job:
     admin:
       ### 调度中心部署跟地址 [选填]：如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行"执行器心跳注册"和"任务结果回调"；为空则关闭自动注册；
-      addresses: http://127.0.0.1:7397/xxl-job-admin
+      addresses: http://127.0.0.1:9999/xxl-job-admin
     executor:
       ### 执行器AppName [选填]：执行器心跳注册分组依据；为空则关闭自动注册
       appname: lottery-job
@@ -93,9 +88,8 @@ xxl:
       ip:
       ### 执行器端口号 [选填]：小于等于0则自动获取；默认端口为9999，单机部署多个执行器时，注意要配置不同执行器端口；
       port: 9998
-      logpath: /Users/fuzhengwei/itstack/data/applogs/xxl-job/jobhandler
+      logpath: /Users/chengxingwu/docker-app/xxl/logs/xxl-job-admin.log
       logretentiondays: 50
-    accessToken: xdsl3ewi3al1oehxmo68pqxer
 
 # 多数据源路由配置
 router:
