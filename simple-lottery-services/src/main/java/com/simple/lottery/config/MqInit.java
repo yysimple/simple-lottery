@@ -1,7 +1,6 @@
-package com.simple.lottery.app.mq.config;
+package com.simple.lottery.config;
 
 import org.apache.kafka.clients.admin.NewTopic;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 
@@ -17,7 +16,6 @@ import java.util.List;
  * @create: 2022-08-14 15:51
  **/
 @Configuration
-@EnableConfigurationProperties(KafkaTopicProperties.class)
 public class MqInit {
     private final KafkaTopicProperties topicConfig;
     private final GenericWebApplicationContext context;

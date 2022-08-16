@@ -1,4 +1,4 @@
-package com.simple.lottery.app.mq.config;
+package com.simple.lottery.config;
 
 import lombok.Getter;
 import lombok.Setter;
