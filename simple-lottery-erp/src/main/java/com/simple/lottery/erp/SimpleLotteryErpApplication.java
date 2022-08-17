@@ -2,8 +2,6 @@ package com.simple.lottery.erp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 /**
  * 项目: simple-lottery-erp
@@ -14,12 +12,7 @@ import org.springframework.boot.web.servlet.support.SpringBootServletInitializer
  * @create: 2022-08-17 10:34
  **/
 @SpringBootApplication
-public class SimpleLotteryErpApplication extends SpringBootServletInitializer {
-
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(SimpleLotteryErpApplication.class);
-    }
+public class SimpleLotteryErpApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SimpleLotteryErpApplication.class, args);

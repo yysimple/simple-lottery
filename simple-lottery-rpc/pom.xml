@@ -23,6 +23,11 @@
             <artifactId>simple-lottery-common</artifactId>
             <version>1.0.0</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.simple.rpc.springboot</groupId>
+            <artifactId>simple-rpc-boot-starter</artifactId>
+        </dependency>
     </dependencies>
 
 </project>

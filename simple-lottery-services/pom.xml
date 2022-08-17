@@ -55,11 +55,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.simple.rpc.springboot</groupId>
-            <artifactId>simple-rpc-boot-starter</artifactId>
-        </dependency>
-
         <!-- 基础接口模块 -->
         <dependency>
             <groupId>com.simple.lottery.infrastructure</groupId>
