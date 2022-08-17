@@ -11,3 +11,9 @@ simple:
       address: redis://127.0.0.1:6379
       password: 123456
 
+wx:
+  config:
+    originalid: gh_95b2229b90fb
+    appid: wx470537fb2f5bf897
+    token: bugstack
+
