@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>活动管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../lib/layui-v2.5.4/css/layui.css" media="all">
+    <link rel="stylesheet" href="../css/public.css" media="all">
+</head>
+<body>
+<div class="layuimini-container">
+    <div class="layuimini-main">
+        <table class="layui-hide" id="currentTableId" lay-filter="currentTableFilter"></table>
+        <script type="text/html" id="currentTableBar">
+            <a class="layui-btn layui-btn-xs data-count-edit" lay-event="edit">编辑</a>
+            <a class="layui-btn layui-btn-xs layui-btn-danger data-count-delete" lay-event="delete">删除</a>
+        </script>
+    </div>
+</div>
+<script src="../lib/layui-v2.5.4/layui.js" charset="utf-8"></script>
+<script src="../js/lay-config.js?v=1.0.4" charset="utf-8"></script>
+
+<script>
+    layui.use(['form', 'table'], function () {
+        var $ = layui.jquery,
+            form = layui.form,
+            table = layui.table;
+
+        table.render({
+            elem: '#currentTableId',
+            url: '/api/activity/queryActivityListPage',
+            cols: [[
+                {type: "checkbox", width: 50, fixed: "left"},
+                {field:'activityId',width:100, title:'活动ID'},
+                {field:'activityName',width:120, title:'活动名称'},
+                {field:'beginDateTime',width:200, title:'开始时间'},
+                {field:'endDateTime',width:200, title:'结束时间'},
+                {field:'stockCount',width:120, title:'库存'},
+                {field:'stockSurplusCount',width:100, title:'剩余库存'},
+                {field:'strategyId',width:100, title:'抽奖策略ID'},
+                {field:'creator',width:100, title:'创建人'},
+                {field:'state',width:60, title:'状态', align: 'center', templet: function (d) {
+                    // 活动状态：1编辑、2提审、3撤审、4通过、5运行(审核通过后worker扫描状态)、6拒绝、7关闭、8开启
+                    if(d.state === 1) return '编辑';
+                    if(d.state === 2) return '提升';
+                    if(d.state === 3) return '撤审';
+                    if(d.state === 4) return '通过';
+                    if(d.state === 5) return '运行';
+                    if(d.state === 6) return '拒绝';
+                    if(d.state === 7) return '关闭';
+                    if(d.state === 8) return '开启';
+                }},
+                {field:'createTime',width:200, title:'创建时间'},
+                {field:'updateTime',width:200, title:'修改时间'},
+            ]],
+            limits: [10, 25, 50, 100],
+            limit: 10,
+            page: true
+        });
+
+    });
+
+</script>
+
+
+</body>
+</html>
