@@ -11,6 +11,13 @@
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+        <fastjson.version>1.2.78</fastjson.version>
+        <apache.commons.version>3.8</apache.commons.version>
+        <junit.version>4.12</junit.version>
+        <dom4j.version>1.6.1</dom4j.version>
+        <xstream.version>1.4.10</xstream.version>
+        <hutool.version>5.5.0</hutool.version>
+        <lottery.rpc.version>1.0.0</lottery.rpc.version>
     </properties>
 
     <parent>
@@ -25,45 +32,47 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.78</version>
+            <version>${fastjson.version}</version>
         </dependency>
+
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.8</version>
+            <version>${apache.commons.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.12</version>
+            <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>dom4j</groupId>
             <artifactId>dom4j</artifactId>
-            <version>1.6.1</version>
+            <version>${dom4j.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.thoughtworks.xstream/xstream -->
         <dependency>
             <groupId>com.thoughtworks.xstream</groupId>
             <artifactId>xstream</artifactId>
-            <version>1.4.10</version>
+            <version>${xstream.version}</version>
         </dependency>
 
         <dependency>
             <groupId>cn.hutool</groupId>
             <artifactId>hutool-all</artifactId>
-            <version>5.5.0</version>
+            <version>${hutool.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.simple.lottery.rpc</groupId>
             <artifactId>simple-lottery-rpc</artifactId>
-            <version>1.0.0</version>
+            <version>${lottery.rpc.version}</version>
         </dependency>
 
     </dependencies>
