@@ -1,0 +1,13 @@
+server:
+  port: 8333
+
+spring:
+  application:
+    name: simple-lottery-api
+
+simple:
+  rpc:
+    register:
+      address: redis://127.0.0.1:6379
+      password: 123456
+
