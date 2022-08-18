@@ -22,4 +22,9 @@ public class Prize {
 
     private List<Strategy> fonts = new ArrayList<>();
     private String background;
+
+    public Prize(Strategy fonts, String background) {
+        this.fonts.add(fonts);
+        this.background = background;
+    }
 }
