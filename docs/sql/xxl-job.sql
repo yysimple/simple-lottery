@@ -212,8 +212,12 @@ CREATE TABLE `xxl_job_user`
 -- Records of xxl_job_user
 -- ----------------------------
 BEGIN;
-INSERT INTO `xxl_job_user`
-VALUES (1, 'admin', '123456', 1, NULL);
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+-- simple-lottery 相关的初始化sql
+INSERT INTO xxl_job.xxl_job_group (id, app_name, title, address_type, address_list, update_time) VALUES (3, 'simple-lottery-job', '抽奖系统执行器', 0, null, '2022-08-21 18:07:21');
+INSERT INTO xxl_job.xxl_job_info (id, job_group, job_desc, add_time, update_time, author, alarm_email, schedule_type, schedule_conf, misfire_strategy, executor_route_strategy, executor_handler, executor_param, executor_block_strategy, executor_timeout, executor_fail_retry_count, glue_type, glue_source, glue_remark, glue_updatetime, child_jobid, trigger_status, trigger_last_time, trigger_next_time) VALUES (4, 3, '测试xxl', '2022-08-16 15:37:12', '2022-08-16 15:45:59', 'wcx', '1449697757@qq.com', 'CRON', '0/5 * * * * ?', 'DO_NOTHING', 'FIRST', 'workerAppJobHandler', '', 'SERIAL_EXECUTION', 0, 0, 'BEAN', '', 'GLUE代码初始化', '2022-08-16 15:37:12', '', 0, 0, 0);
+INSERT INTO xxl_job.xxl_job_user (id, username, password, role, permission) VALUES (1, 'admin', 'e10adc3949ba59abbe56e057f20f883e', 1, null);
