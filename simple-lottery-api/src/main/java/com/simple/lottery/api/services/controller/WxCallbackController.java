@@ -22,10 +22,10 @@ import java.util.Date;
  * @create: 2022-08-18 22:13
  **/
 @RestController
-@RequestMapping("/wx/portal/{appid}")
-public class WxPortalController {
+@RequestMapping("/wx/checkCall")
+public class WxCallbackController {
 
-    private Logger logger = LoggerFactory.getLogger(WxPortalController.class);
+    private final Logger logger = LoggerFactory.getLogger(WxCallbackController.class);
 
     @Resource
     private IWxValidateService wxValidateService;
@@ -42,20 +42,20 @@ public class WxPortalController {
      * echostr   微信端发来的验证字符串
      */
     @GetMapping(produces = "text/plain;charset=utf-8")
-    public String validate(@PathVariable String appid, @RequestParam(value = "signature", required = false) String signature, @RequestParam(value = "timestamp", required = false) String timestamp, @RequestParam(value = "nonce", required = false) String nonce, @RequestParam(value = "echostr", required = false) String echostr) {
+    public String validate(@RequestParam(value = "signature", required = false) String signature, @RequestParam(value = "timestamp", required = false) String timestamp, @RequestParam(value = "nonce", required = false) String nonce, @RequestParam(value = "echostr", required = false) String echostr) {
         try {
-            logger.info("微信公众号验签信息{}开始 [{}, {}, {}, {}]", appid, signature, timestamp, nonce, echostr);
+            logger.info("微信公众号验签信息开始 [{}, {}, {}, {}]", signature, timestamp, nonce, echostr);
             if (StringUtils.isAnyBlank(signature, timestamp, nonce, echostr)) {
                 throw new IllegalArgumentException("请求参数非法，请核实!");
             }
             boolean check = wxValidateService.checkSign(signature, timestamp, nonce);
-            logger.info("微信公众号验签信息{}完成 check：{}", appid, check);
+            logger.info("微信公众号验签信息完成 check：{}", check);
             if (!check) {
                 return null;
             }
             return echostr;
         } catch (Exception e) {
-            logger.error("微信公众号验签信息{}失败 [{}, {}, {}, {}]", appid, signature, timestamp, nonce, echostr, e);
+            logger.error("微信公众号验签信息失败 [{}, {}, {}, {}]", signature, timestamp, nonce, echostr, e);
             return null;
         }
     }
@@ -64,7 +64,7 @@ public class WxPortalController {
      * 此处是处理微信服务器的消息转发的
      */
     @PostMapping(produces = "application/xml; charset=UTF-8")
-    public String post(@PathVariable String appid, @RequestBody String requestBody, @RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce, @RequestParam("openid") String openid, @RequestParam(name = "encrypt_type", required = false) String encType, @RequestParam(name = "msg_signature", required = false) String msgSignature) {
+    public String post(@RequestBody String requestBody, @RequestParam("signature") String signature, @RequestParam("timestamp") String timestamp, @RequestParam("nonce") String nonce, @RequestParam("openid") String openid, @RequestParam(name = "encrypt_type", required = false) String encType, @RequestParam(name = "msg_signature", required = false) String msgSignature) {
         try {
             logger.info("接收微信公众号信息请求{}开始 {}", openid, requestBody);
             MessageTextEntity message = XmlUtil.xmlToBean(requestBody, MessageTextEntity.class);

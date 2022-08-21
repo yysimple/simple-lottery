@@ -2,8 +2,6 @@ server:
   port: 8222
 
 spring:
-  profiles:
-    active: win
   application:
     name: simple-lottery-erp
 
