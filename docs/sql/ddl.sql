@@ -257,10 +257,10 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for user_strategy_export_000
+-- Table structure for user_strategy_export_004
 -- ----------------------------
-DROP TABLE IF EXISTS `user_strategy_export_000`;
-CREATE TABLE `user_strategy_export_000`
+DROP TABLE IF EXISTS `user_strategy_export_004`;
+CREATE TABLE `user_strategy_export_004`
 (
     `id`            bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
     `u_id`          varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  DEFAULT NULL COMMENT '用户ID',
@@ -464,10 +464,10 @@ SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
--- Table structure for user_strategy_export_000
+-- Table structure for user_strategy_export_004
 -- ----------------------------
-DROP TABLE IF EXISTS `user_strategy_export_000`;
-CREATE TABLE `user_strategy_export_000`
+DROP TABLE IF EXISTS `user_strategy_export_004`;
+CREATE TABLE `user_strategy_export_004`
 (
     `id`            bigint(20) NOT NULL AUTO_INCREMENT COMMENT '自增ID',
     `u_id`          varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin  DEFAULT NULL COMMENT '用户ID',
