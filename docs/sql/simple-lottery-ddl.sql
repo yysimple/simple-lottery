@@ -33,18 +33,6 @@ CREATE TABLE `activity`
   COLLATE = utf8mb4_bin COMMENT ='活动配置';
 
 -- ----------------------------
--- Records of activity
--- ----------------------------
-BEGIN;
-INSERT INTO `activity`
-VALUES (1, 100001, '活动名', '测试活动', now(), now(), 100, 94, 10, 10001, 5, 'wcx',
-        now(), now());
-INSERT INTO `activity`
-VALUES (3, 100002, '活动名02', '测试活动', now(), now(), 100, 100, 10, 10001, 5, 'wcx',
-        now(), now());
-COMMIT;
-
--- ----------------------------
 -- Table structure for award
 -- ----------------------------
 DROP TABLE IF EXISTS `award`;
@@ -65,22 +53,6 @@ CREATE TABLE `award`
   COLLATE = utf8mb4_bin COMMENT ='奖品配置';
 
 -- ----------------------------
--- Records of award
--- ----------------------------
-BEGIN;
-INSERT INTO `award`
-VALUES (1, '1', 1, 'IMac', 'Code', now(), now());
-INSERT INTO `award`
-VALUES (2, '2', 1, 'iphone', 'Code', now(), now());
-INSERT INTO `award`
-VALUES (3, '3', 1, 'ipad', 'Code', now(), now());
-INSERT INTO `award`
-VALUES (4, '4', 1, 'AirPods', 'Code', now(), now());
-INSERT INTO `award`
-VALUES (5, '5', 1, 'Book', 'Code', now(), now());
-COMMIT;
-
--- ----------------------------
 -- Table structure for rule_tree
 -- ----------------------------
 DROP TABLE IF EXISTS `rule_tree`;
@@ -96,14 +68,6 @@ CREATE TABLE `rule_tree`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 2110081903
   DEFAULT CHARSET = utf8;
-
--- ----------------------------
--- Records of rule_tree
--- ----------------------------
-BEGIN;
-INSERT INTO `rule_tree`
-VALUES (2110081902, '抽奖活动规则树', '用于决策不同用户可参与的活动', 1, now(), now());
-COMMIT;
 
 -- ----------------------------
 -- Table structure for rule_tree_node
@@ -123,26 +87,6 @@ CREATE TABLE `rule_tree_node`
   DEFAULT CHARSET = utf8;
 
 -- ----------------------------
--- Records of rule_tree_node
--- ----------------------------
-BEGIN;
-INSERT INTO `rule_tree_node`
-VALUES (1, 2110081902, 1, NULL, 'userGender', '用户性别[男/女]');
-INSERT INTO `rule_tree_node`
-VALUES (11, 2110081902, 1, NULL, 'userAge', '用户年龄');
-INSERT INTO `rule_tree_node`
-VALUES (12, 2110081902, 1, NULL, 'userAge', '用户年龄');
-INSERT INTO `rule_tree_node`
-VALUES (111, 2110081902, 2, '100001', NULL, NULL);
-INSERT INTO `rule_tree_node`
-VALUES (112, 2110081902, 2, '100002', NULL, NULL);
-INSERT INTO `rule_tree_node`
-VALUES (121, 2110081902, 2, '100003', NULL, NULL);
-INSERT INTO `rule_tree_node`
-VALUES (122, 2110081902, 2, '100004', NULL, NULL);
-COMMIT;
-
--- ----------------------------
 -- Table structure for rule_tree_node_line
 -- ----------------------------
 DROP TABLE IF EXISTS `rule_tree_node_line`;
@@ -158,24 +102,6 @@ CREATE TABLE `rule_tree_node_line`
 ) ENGINE = InnoDB
   AUTO_INCREMENT = 7
   DEFAULT CHARSET = utf8;
-
--- ----------------------------
--- Records of rule_tree_node_line
--- ----------------------------
-BEGIN;
-INSERT INTO `rule_tree_node_line`
-VALUES (1, 2110081902, 1, 11, 1, 'man');
-INSERT INTO `rule_tree_node_line`
-VALUES (2, 2110081902, 1, 12, 1, 'woman');
-INSERT INTO `rule_tree_node_line`
-VALUES (3, 2110081902, 11, 111, 3, '25');
-INSERT INTO `rule_tree_node_line`
-VALUES (4, 2110081902, 11, 112, 4, '25');
-INSERT INTO `rule_tree_node_line`
-VALUES (5, 2110081902, 12, 121, 3, '25');
-INSERT INTO `rule_tree_node_line`
-VALUES (6, 2110081902, 12, 122, 4, '25');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for strategy
@@ -200,14 +126,6 @@ CREATE TABLE `strategy`
   COLLATE = utf8mb4_bin COMMENT ='策略配置';
 
 -- ----------------------------
--- Records of strategy
--- ----------------------------
-BEGIN;
-INSERT INTO `strategy`
-VALUES (1, 10001, 'test', 2, 1, NULL, '', now(), now());
-COMMIT;
-
--- ----------------------------
 -- Table structure for strategy_detail
 -- ----------------------------
 DROP TABLE IF EXISTS `strategy_detail`;
@@ -227,22 +145,6 @@ CREATE TABLE `strategy_detail`
   AUTO_INCREMENT = 6
   DEFAULT CHARSET = utf8mb4
   COLLATE = utf8mb4_bin COMMENT ='策略明细';
-
--- ----------------------------
--- Records of strategy_detail
--- ----------------------------
-BEGIN;
-INSERT INTO `strategy_detail`
-VALUES (1, 10001, '1', 'IMac', 10, 0, 0.05, now(), now());
-INSERT INTO `strategy_detail`
-VALUES (2, 10001, '2', 'iphone', 20, 19, 0.15, now(), now());
-INSERT INTO `strategy_detail`
-VALUES (3, 10001, '3', 'ipad', 50, 43, 0.20, now(), now());
-INSERT INTO `strategy_detail`
-VALUES (4, 10001, '4', 'AirPods', 100, 70, 0.25, now(), now());
-INSERT INTO `strategy_detail`
-VALUES (5, 10001, '5', 'Book', 500, 389, 0.35, now(), now());
-COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
 
