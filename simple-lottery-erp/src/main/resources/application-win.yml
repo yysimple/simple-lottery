@@ -2,14 +2,12 @@ server:
   port: 8222
 
 spring:
-  profiles:
-    active: win
   application:
     name: simple-lottery-erp
 
 simple:
   rpc:
     register:
-      address: redis://127.0.0.1:6379
+      address: redis://192.168.206.100:6379
       password: 123456
 
