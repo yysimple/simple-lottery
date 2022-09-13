@@ -31,7 +31,7 @@ spring:
     name: simple-lottery-services
   # 通过docker-compose安装的，脚本在docs里面
   kafka:
-    bootstrap-servers: 127.0.0.1:9092
+    bootstrap-servers: 192.168.206.100:9092
     producer:
       # 发生错误后，消息重发的次数。
       retries: 1
@@ -78,7 +78,7 @@ xxl:
   job:
     admin:
       ### 调度中心部署跟地址 [选填]：如调度中心集群部署存在多个地址则用逗号分隔。执行器将会使用该地址进行"执行器心跳注册"和"任务结果回调"；为空则关闭自动注册；
-      addresses: http://127.0.0.1:9999/xxl-job-admin
+      addresses: http://192.168.206.100:9999/xxl-job-admin
     executor:
       ### 执行器AppName [选填]：执行器心跳注册分组依据；为空则关闭自动注册
       appname: simple-lottery-job
